@@ -1,0 +1,26 @@
+.card {
+    align-items: center;
+    background-color: #fff;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
+    box-sizing: border-box;
+    margin: 0 0 0 20%;
+    padding: 10px 0 14px;
+    /* width: 396px; */
+}
+
+.login {
+    height: 100vh;
+}
+
+.cover-group {
+    position: relative;
+}
+
+.cover-group>i{
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    cursor: pointer;
+}
