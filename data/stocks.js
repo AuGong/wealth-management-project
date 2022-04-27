@@ -1,4 +1,3 @@
-const axios = require('axios');
 const mongoCollections = require('../config/mongoCollections');
 const stocks = mongoCollections.stocks;
 let { ObjectId } = require('mongodb');
