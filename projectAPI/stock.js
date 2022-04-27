@@ -7,7 +7,7 @@
 const ccxt = require("ccxt");
 async function findstock() {
   let binance = new ccxt.binance();
-  let result = await binance.fetch_ticker('BTC/USDT');
+  let result = await binance.fetch_ticker('');
   console.log( result);
   return result};
 
