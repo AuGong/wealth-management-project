@@ -100,7 +100,7 @@ router.post('/login', async (req, res) => {
 
 router.get('/trade', async(req,res) =>{
     if (req.session.username) {
-        res.render("private", { title: "Secret", currUser: req.session.username });
+        res.render("trade");
     }
 });
 
