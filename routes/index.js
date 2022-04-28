@@ -1,4 +1,9 @@
 const constructorMethod = (app) => {
+  app.use('/', userRoutes);
+  app.use('*', (req, res) => {
+        res.status(404).json({ Error: 'Not found' })
+    });
+  
   app.use("/login", (req, res) => {
     res.render("login", {});
   });
