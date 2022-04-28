@@ -7,7 +7,7 @@
 const ccxt = require("ccxt");
 async function findstock() {
   let binance = new ccxt.binance();
-  let result = await binance.fetch_ticker('BTC/USDT');
+  let result = await binance.fetch_ticker('');
   console.log( result);
   return result};
 
@@ -40,6 +40,37 @@ req.on('error', (error) => {
 
 req.end()
 
+
+//Search stock name or ticker
+// Ustage
+//https://site.financialmodelingprep.com/developer/docs#Stock-Price
+
+// const options2 = {
+//   hostname: 'financialmodelingprep.com',
+//   port: 443,
+//   path: '/api/v3/search-ticker?query=AA&limit=10&exchange=NASDAQ&apikey=4116b7eb972d010e408e5e350e723b1a',
+//   method: 'GET'
+// }
+
+const options2 = {
+  hostname: 'financialmodelingprep.com',
+  port: 443,
+  path: '/api/v3/search-name?query=meta&limit=10&exchange=NASDAQ&apikey=4116b7eb972d010e408e5e350e723b1a',
+  method: 'GET'
+}
+
+const req2 = https.request(options2, (res) => {
+  res.on('data', (d) => {
+    process.stdout.write(d)
+  })
+})
+
+req2.on('error', (error) => {
+  console.error(error)
+})
+
+req2.end()
+
 // Historical Daily Prices
 // Ustage
 //https://www.npmjs.com/package/yahoo-stock-prices
@@ -64,4 +95,4 @@ const yahooStockPrices = require("yahoo-stock-prices");
    console.log(prices);
 };
 
-findstock2()
+// findstock2()
