@@ -1,4 +1,5 @@
 <main>
+    <form class="row g-3" id="signup-form" method="POST" action="/signup">
     <div class="px-4 py-5 px-md-5 text-center text-lg-start" style="background-color: hsl(0, 0%, 96%)">
         <div class="container">
         <div class="row gx-lg-5 align-items-center">
@@ -21,23 +22,24 @@
                 <form>
                     <!-- Username input -->
                     <div class="form-outline mb-2">
-                    <input type="text" id="inputUsername" class="form-control" />
+                    <input type="text" id="inputUsername" class="form-control" name="username"/>
                     <label class="form-label" for="inputUsername">Username</label>
                     </div>
 
                     <!-- Email input -->
                     <div class="form-outline mb-2">
-                    <input type="email" id="inputEmail" class="form-control" />
+                    <input type="email" id="inputEmail" class="form-control" name="email"/>
                     <label class="form-label" for="inputEmail">Email address</label>
                     </div>
 
                     <!-- Gender input -->
                     <div class="form-outline mb-2">
-                        <select id="inputGender" class="form-select">
-                        <option selected>0: Female</option>
-                        <option>1: Male</option>
-                        <option>2: Others</option>
+                        <select id="inputGender" class="form-select" name="gender">
+                        <option selected>Female</option>
+                        <option>Male</option>
+                        <option>Others</option>
                         </select>
+                         {{!-- <input type="gender" id="gender" class="form-control"/> --}}
                         <label for="inputGender" class="form-label">Gender</label>
                     </div>
 
@@ -52,7 +54,9 @@
                     <button type="submit" class="btn btn-block mb-2 signUpBtn">
                     Sign up
                     </button>
-
+                    <div class="col-md-12">
+                        <a href="/">Already have an account?</a>
+                    </div>
                 </form>
                 </div>
             </div>
@@ -77,4 +81,5 @@
             togglePassword.classList.toggle('bi-eye');
         });
     </script>
+    </form>
 </main>
