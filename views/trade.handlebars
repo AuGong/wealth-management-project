@@ -1,0 +1,82 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a> 
+    <div class="me-auto">
+      <div class="navbar-nav">
+        <a class="nav-link active" aria-current="page" href="/trade">Trade</a>
+        <a class="nav-link" href="/stocks">Stocks</a>
+        <a class="nav-link" href="/crypto">Crypto</a>
+        <a class="nav-link" href="/transactions">Transactions</a>
+        <a class="nav-link" href="#">Statistics</a>
+      </div>
+    </div>
+    <div class="navDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Username
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item" href="/user">Profile</a></li>
+            <li><a class="dropdown-item" href="#">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+ </div>
+</nav>
+
+<div class="col-lg-5 tradeCard">
+  <div class="card">
+      <div class="card-body">
+      <form>
+          <div class="form-outline mb-2">
+              <select id="inputAssetType" class="form-select">
+              <option selected>0: Stock</option>
+              <option>1: Crypto</option>
+              </select>
+              <label for="inputAssetType" class="form-label">Asset Type</label>
+          </div>
+
+
+          <div class="form-outline mb-2 cover-group">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Code" id="inputStockCode" aria-describedby="button-addon">
+              <button class="btn btn-info" type="button" id="button-addon">Search</button>
+            </div>
+            <label class="form-label" for="inputStockCode">Stock/Crypto Code</label> 
+          </div>
+          
+
+          <div class="form-outline mb-2 cover-group">
+            <input type="text" id="inputStockName" name="inputStockName" class="form-control"/>
+            <label class="form-label" for="inputStockName">Stock/Crypto Name</label>  
+          </div>
+
+          <!-- Stock Price input -->
+          <div class="form-outline mb-2 cover-group">
+            <input type="text" id="inputStockPrice" name="inputStockPrice" class="form-control"/>
+            <label class="form-label" for="inputStockPrice">Stock/Crypto Current Price</label>  
+          </div>
+
+          <div class="form-outline mb-2">
+              <select id="inputTradeType" class="form-select">
+              <option selected>0: Buy</option>
+              <option>1: Sell</option>
+              </select>
+              <label for="inputTradeType" class="form-label">Trade Type</label>
+          </div>
+
+          <div class="form-outline mb-2 cover-group">
+            <input type="text" id="inputQuantity" name="inputQuantity" class="form-control"/>
+            <label class="form-label" for="inputQuantity">Quantity</label>  
+          </div>
+
+          <!-- Submit button -->
+          <button type="submit" class="btn btn-block tradeBtn">
+          Trade
+          </button>
+      </form>
+      </div>
+  </div>
+</div>
