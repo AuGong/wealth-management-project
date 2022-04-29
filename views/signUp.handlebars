@@ -57,6 +57,9 @@
                     <div class="col-md-12">
                         <a href="/">Already have an account?</a>
                     </div>
+                    {{#each errors}}
+                        <div class="errors">{{this}}</div>
+                    {{/each}}
                 </form>
                 </div>
             </div>
@@ -64,7 +67,6 @@
         </div>
         </div>
     </div>
-  
     <script>
         let togglePassword = document.getElementById('togglePassword');
         let password = document.querySelector('#password');

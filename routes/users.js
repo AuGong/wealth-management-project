@@ -21,7 +21,7 @@ router.get('/signup', async (req, res) => {
         res.redirect("/trade");
     }
     else {
-        res.render("signup", {
+        res.render("signUp", {
             title: 'Sign Up',
             authenticated: false,
         });
