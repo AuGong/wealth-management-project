@@ -2,4 +2,5 @@
 
 
 
-April 5: sign up, login page added
+April 5: sign up, login page added  
+April 28: sign up, login function all done (Owen)
