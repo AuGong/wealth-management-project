@@ -18,7 +18,7 @@
             <div class="col-lg-5 mb-5 mb-lg-0">
             <div class="card">
                 <div class="card-body py-5 px-md-5">
-                <form id="login-form" action="/login" method="POST">
+                <form id="login-form" method="POST" action="/login">
                     <!-- Username input -->
                     <div class="form-outline mb-2">
                     <input type="text" id="inputUsername" class="form-control" />
@@ -41,10 +41,11 @@
                         <span class="_1rf8">or</span>
                     </div>
 
-                    <!-- Submit button -->
-                    <button type="submit" class="btn btn-block mb-2 signUpBtn">
-                    Create new account
-                    </button>
+                    <a href="/signup"> 
+                        <button type="button" class="btn btn-block mb-2 signUpBtn">
+                            Create new account
+                        </button>
+                    </a>
                 </form>
                 </div>
             </div>
