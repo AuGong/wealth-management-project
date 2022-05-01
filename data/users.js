@@ -3,6 +3,7 @@ const users = mongoCollections.users;
 const validation = require("../validation");
 const bcrypt = require("bcryptjs");
 const saltRounds = 5;
+const uuid = require('uuid');
 
 module.exports = {
     async createUser(username, password, email, gender) {
@@ -15,6 +16,7 @@ module.exports = {
         
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         newUser = {
+            _id: uuid.v4(),
             username: username,
             email: email,
             gender: gender,
