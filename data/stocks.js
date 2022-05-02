@@ -1,5 +1,6 @@
 const mongoCollections = require('../config/mongoCollections');
 const stocks = mongoCollections.stocks;
+const transactions = mongoCollections.transactions;
 let { ObjectId } = require('mongodb');
 
 //Jiawei wrote the parts demonstrating the API
@@ -55,9 +56,19 @@ function checkAmount(num){
         throw 'Error: amount must be greater than zero';
     }
     return parseInt(num);
-
 }
 
+function checkName(name){
+    if (!name){
+        return 'Error: name must not be empty';
+    }
+    if (typeof name != 'string'){
+        return 'Error: name mus tbe a string';
+    }
+    if (name.trim().length === 0){
+        return 'Error: name mus tnot be empty spaces';
+    }
+}
 let exportedMethods = {
     async getStockBySymbol(symbol){
         let updatedSymbol; //to get all caps vers. of symbol
@@ -77,7 +88,7 @@ let exportedMethods = {
         }
         return foundStock;
     },
-    async buyStock (userId, amount, stockId){ //updates stockholders with amount bought
+    async buyStock (userId, amount, stockId, time, price){ //updates stockholders with amount bought, and adds a transaction, returns the updated stock
         let newAmount;
         let stockCheck = checkId(stockId, 'stock');
         let userCheck = checkId(userId, 'user');
@@ -135,9 +146,37 @@ let exportedMethods = {
         if (!updateCheck.acknowledged || updateCheck.matchedCount == 0 || updateCheck.modifiedCount == 0){
             throw 'Error: failed to update Stock';
         }
+
+        //Start adding purchase to transactions
+        let newTransaction ={
+            userId: userId,
+            assetId: stockId,
+            date: time,
+            transactionType: true,
+            assetType: true,
+            quantity: amount,
+            price: price
+        }
+        let transactionCollection;
+        try{
+            transactionCollection = await transactions();
+        }
+        catch(e){
+            throw e;
+        }
+        let buyInsertInfo
+        try{
+            buyInsertInfo = transactionCollection.insertOne(newTransaction);
+        }
+        catch(e){
+            throw e;
+        }
+        if (buyInsertInfo.insertedCount == 0){
+            throw 'Error: failed to add purchase to transactions';
+        }
         return temp;
     },
-    async sellStock(userId, amount, stockId){ //Sells stock, sells all if amount given is more than amount owned
+    async sellStock(userId, amount, stockId, time, price){ //Sells stock, sells all if amount given is more than amount owned, adds transaction to collection
         let newAmount;
         let stockCheck = checkId(stockId, 'stock');
         let userCheck = checkId(userId, 'user');
@@ -202,10 +241,37 @@ let exportedMethods = {
         if (!updateCheck.acknowledged || updateCheck.matchedCount == 0 || updateCheck.modifiedCount == 0){
             throw 'Error: failed to update Stock';
         }
+        //Start adding purchase to transactions
+        let newTransaction ={
+            userId: userId,
+            assetId: stockId,
+            date: time,
+            transactionType: false,
+            assetType: true,
+            quantity: amount,
+            price: price
+        }
+        let transactionCollection;
+        try{
+            transactionCollection = await transactions();
+        }
+        catch(e){
+            throw e;
+        }
+        let buyInsertInfo
+        try{
+            buyInsertInfo = transactionCollection.insertOne(newTransaction);
+        }
+        catch(e){
+            throw e;
+        }
+        if (buyInsertInfo.insertedCount == 0){
+            throw 'Error: failed to add purchase to transactions';
+        }
         return temp;
         
     },
-    async createStock(symbol){ //creates a stock and adds it to the db, returns the new stock
+    async createStock(symbol, name){ //creates a stock and adds it to the db, returns the new stock
         let newSym;
         try {
             newSym = checkSymbol(symbol);

@@ -1,9 +1,11 @@
 const userRoutes = require('./users');
+const stockRoutes = require('./stocks');
 const constructorMethod = (app) => {
   app.use('/', userRoutes);
   app.use('*', (req, res) => {
         res.status(404).json({ Error: 'Not found' })
     });
+  app.use('/stocks', stockRoutes);
   
   app.use("/login", (req, res) => {
     res.render("login", {});
@@ -16,9 +18,6 @@ const constructorMethod = (app) => {
   });
   app.use("/trade", (req, res) => {
     res.render("trade", {});
-  });
-  app.use("/stocks", (req, res) => {
-    res.render("stocks", {});
   });
   app.use("/crypto", (req, res) => {
     res.render("crypto", {});
