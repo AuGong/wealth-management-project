@@ -104,6 +104,12 @@ router.get('/trade', async(req,res) =>{
     }
 });
 
+router.get('/user', async(req,res) =>{
+    if (req.session.username) {
+        res.render("user");
+    }
+});
+
 router.get('/logout', async(req,res) =>{
     req.session.destroy();
     res.render("logout", { title: "Log Out" });
