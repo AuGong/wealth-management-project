@@ -1,3 +1,5 @@
+const mongoCollections = require("../config/mongoCollections");
+const users = mongoCollections.users;
 const express = require("express");
 const router = express.Router();
 const data = require("../data");
@@ -106,8 +108,16 @@ router.get('/trade', async(req,res) =>{
 
 router.get('/user', async(req,res) =>{
     if (req.session.username) {
-        res.render("user");
+        const userCollection = await users();
+        let user = await userCollection.findOne({username: req.session.username});
+        res.render("user", { title: "Secret", currUser: user.username , email: user.email,  gender: user.gender});
+    } else {
+        res.render("login", {
+            title: 'Log In',
+            authenticated: false,
+        });
     }
+
 });
 
 router.get('/logout', async(req,res) =>{
