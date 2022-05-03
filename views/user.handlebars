@@ -18,7 +18,7 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <li><a class="dropdown-item" href="/user">Profile</a></li>
-            <li><a class="dropdown-item" href="#">Logout</a></li>
+            <li><a class="dropdown-item" href="/logout">Logout</a></li>
           </ul>
         </li>
       </ul>
@@ -40,14 +40,16 @@
       <td>
         <div class="d-flex align-items-center">
           <div class="ms-3">
-            <p class="fw-bold mb-1">John Doe</p>
+            <p class="fw-normal mb-1">{{currUser}}</p>
           </div>
         </div>
       </td>
       <td>
-        <p class="fw-normal mb-1">john.doe@gmail.com</p>
+        <p class="fw-normal mb-1">{{email}}</p>
       </td>
-      <td>Male</td>
+      <td> 
+        <p class="fw-normal mb-1">{{gender}}</p>
+        </td>
       <td>
         <button type="button" class="btn btn-link btn-sm btn-rounded">
           Edit
