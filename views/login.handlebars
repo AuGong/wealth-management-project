@@ -21,7 +21,7 @@
                 <form id="login-form" method="POST" action="/login">
                     <!-- Username input -->
                     <div class="form-outline mb-2">
-                    <input type="text" id="inputUsername" class="form-control" />
+                    <input type="text" id="inputUsername" name="username" class="form-control" />
                     <label class="form-label" for="inputUsername">Username</label>
                     </div>
 
@@ -36,6 +36,10 @@
                     <button type="submit" class="btn btn-block mb-2 logInBtn">
                     Log In
                     </button>
+
+                    {{#each errors}}
+                    <div>{{this}}</div>
+                    {{/each}}
 
                     <div class="_1rf5">
                         <span class="_1rf8">or</span>

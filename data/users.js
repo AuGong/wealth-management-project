@@ -3,11 +3,13 @@ const users = mongoCollections.users;
 const validation = require("../validation");
 const bcrypt = require("bcryptjs");
 const saltRounds = 5;
+let { ObjectId } = require("mongodb"); 
 
 module.exports = {
     async createUser(username, password, email, gender) {
         username = validation.checkUsername(username, "Username");
         password = validation.checkPassword(password, "Password");
+        email = validation.checkEmail(email, "Email");
 
         const userCollection = await users();
         let newUser = await userCollection.findOne({username: username});
@@ -22,7 +24,17 @@ module.exports = {
         };
         const insertInfo = await userCollection.insertOne(newUser);
         if (insertInfo.insertedCount === 0) throw "Could not add user.";
-        return { userInserted: true };
+        
+        const newId = insertInfo.insertedId;
+        return await this.getUserById(newId.toString());  
+    },
+
+    async getUserById(userId) {
+        const userCollection = await users();
+        let user = await userCollection.findOne({ _id: ObjectId(userId) });
+        if (user === null) throw 'No user with that id.';
+        user._id = user._id.toString();
+        return user;
     },
 
     async checkUser(username, password) {
@@ -35,6 +47,27 @@ module.exports = {
 
         let compareToMatch = await bcrypt.compare(password, curUser.password);
         if (!compareToMatch) throw "Either the username or password is invalid!";
-        return { authenticated: true };
+
+        curUser._id = curUser._id.toString();
+        return { authenticated: true, user: curUser };
+    },
+
+    async updateUser(id, username, email, gender) {
+        username = validation.checkUsername(username, "Username");
+        email = validation.checkEmail(email, "Email");
+
+        const userCollection = await users();
+        const updateUser = {
+            username: username,
+            email: email,
+            gender: gender
+        };
+        const updatedInfo = await userCollection.updateOne(
+            { _id: ObjectId(id) },
+            { $set: updateUser }
+        );
+        if (!updatedInfo.matchedCount && !updatedInfo.modifiedCount)
+          throw "could not update band successfully";
+        return await this.getUserById(id)
     }
 }
