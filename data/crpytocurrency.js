@@ -4,7 +4,9 @@ const transactions = mongoCollections.transactions
 const { ObjectId } = require('mongodb');
 const { cryptocurrency } = require('../config/mongoCollections');
 const users = require('./users');
-const cryptoName = {'BTC':'Bitcoin','ETH':'Ethereum','BNB':'BNB','SOL':'Solana','XRP':'XRP'}
+const cryptoNames = {'BTC':'Bitcoin','ETH':'Ethereum','BNB':'BNB',
+'SOL':'Solana','XRP':'XRP','LUNA':'Terra',
+'ADA':'Cardano','DOGE':'Dogecoin','AVAX':'Avalanche','DOT':'Polkadot'}
 
 function checkSymbol (sym){
     if (!sym){
@@ -19,6 +21,7 @@ function checkSymbol (sym){
     if (sym.trim().length < 3 || sym.trim().length > 5){
         throw 'Error: symbol must be between 3-5 characters';
     }
+    if(!ObjectId.keys(crpytoNames).includes(sym.toUpperCase().trim())) throw `only support these crpytos: ${ObjectId.keys(crpytoNames)}`
     return sym.toUpperCase().trim();
 }
 
@@ -188,7 +191,7 @@ module.exports = {
                         coinHolders.push({"userId":niceUserId,"numberOfCoins":niceAmount})
                    }
                 }
-                
+
                 let updateInfo = await cryptocurrency.updateOne({symbol:niceSymbol},{$set:{coinHolders:coinHolders}})
                 const transCollection = await transactions() // insert a selling transection record
                     let newRecord = {
@@ -205,5 +208,19 @@ module.exports = {
                     
             }
         }
+    },
+    async searchCrpyto(symbol){
+        //blur search from database
+        try{
+            let niceSymbol = checkSymbol(symbol)
+        }catch(e){
+            throw e
+        }
+        const crpytoCollection = await crptocurrency()
+        let crpyto = crpytoCollection.find({symbol:{$regex:'.*' + niceSymbol + '.*'}})
+        if(crpyto===null){
+            throw "not find any relative crpyto"
+        }
+        return {"crpytoName":cryptoNames[niceSymbol],"coinHolders":crpyto.coinHolders}
     }
 }
