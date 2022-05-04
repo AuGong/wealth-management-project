@@ -50,13 +50,13 @@
             
 
             <div class="form-outline mb-2 cover-group">
-              <input type="text" id="inputStockName" name="inputStockName" class="form-control"/>
+              <input type="text" id="inputStockName" name="inputStockName" class="form-control" readonly/>
               <label class="form-label" for="inputStockName">Stock/Crypto Name</label>  
             </div>
 
             <!-- Stock Price input -->
             <div class="form-outline mb-2 cover-group">
-              <input type="text" id="inputStockPrice" name="inputStockPrice" class="form-control"/>
+              <input type="text" id="inputStockPrice" name="inputStockPrice" class="form-control" readonly/>
               <label class="form-label" for="inputStockPrice">Stock/Crypto Current Price</label>  
             </div>
 
@@ -72,6 +72,10 @@
               <input type="text" id="inputQuantity" name="inputQuantity" class="form-control"/>
               <label class="form-label" for="inputQuantity">Quantity</label>  
             </div>
+
+            {{#each errors}}
+            <div>{{this}}</div>
+            {{/each}}
 
             <!-- Submit button -->
             <button type="submit" class="btn btn-block tradeBtn">
@@ -144,3 +148,5 @@
   </div>
   <!-- TradingView Widget END -->
 </div>
+
+<script src="/public/js/tradeSearch.js"></script>
