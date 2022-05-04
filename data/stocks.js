@@ -58,17 +58,6 @@ function checkAmount(num){
     return parseInt(num);
 }
 
-function checkName(name){
-    if (!name){
-        return 'Error: name must not be empty';
-    }
-    if (typeof name != 'string'){
-        return 'Error: name mus tbe a string';
-    }
-    if (name.trim().length === 0){
-        return 'Error: name mus tnot be empty spaces';
-    }
-}
 let exportedMethods = {
     async getStockBySymbol(symbol){
         let updatedSymbol; //to get all caps vers. of symbol
