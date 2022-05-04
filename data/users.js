@@ -67,7 +67,7 @@ module.exports = {
             { $set: updateUser }
         );
         if (!updatedInfo.matchedCount && !updatedInfo.modifiedCount)
-          throw "could not update band successfully";
+          throw "could not update user successfully";
         return await this.getUserById(id)
     }
 }
