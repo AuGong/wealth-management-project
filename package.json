@@ -18,8 +18,7 @@
     "bcryptjs": "^2.4.3",
     "express": "^4.17.3",
     "express-handlebars": "^6.0.3",
-    "express-session": "^1.17.2",
-    "uuid": "^3.3.2"
+    "express-session": "^1.17.2"
   },
   "keywords": [],
   "description": ""

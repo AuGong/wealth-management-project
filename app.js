@@ -23,13 +23,13 @@ app.use(
   })
 );
 
-app.use(function(req, res, next) {
-  console.log('Timestamp ' + new Date().toUTCString());
-  console.log('Request Method: ' + req.method);
-  console.log('Request Routes: ' + req.originalUrl);
+app.use(function (req, res, next) {
+  console.log("Timestamp " + new Date().toUTCString());
+  console.log("Request Method: " + req.method);
+  console.log("Request Routes: " + req.originalUrl);
   next();
   if (req.session) {
-    if (!req.session.username) {
+    if (!req.session.user) {
       console.log("(Non-Authenticated User)");
     } else {
       console.log("Authenticated User");
@@ -41,8 +41,8 @@ app.use(function(req, res, next) {
 });
 
 app.use("/trade", (req, res, next) => {
-  if (!req.session.username) {
-    return res.status(403).render('notLogin', {title: "Not Login"});
+  if (!req.session.user) {
+    return res.status(403).render("notLogin", { title: "Not Login" });
   } else {
     next();
   }

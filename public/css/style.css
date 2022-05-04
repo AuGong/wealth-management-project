@@ -89,3 +89,12 @@ body {
     color: #fff;
     font-weight: bold;
 }
+
+.tradeContent {
+    float: left;
+}
+
+.tradeRight {
+    padding-top: 20px;
+    padding-left: 200px;
+}

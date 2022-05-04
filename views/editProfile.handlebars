@@ -1,0 +1,84 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a> 
+    <div class="me-auto">
+      <div class="navbar-nav">
+        <a class="nav-link active" aria-current="page" href="/trade">Trade</a>
+        <a class="nav-link" href="/stocks">Stocks</a>
+        <a class="nav-link" href="/crypto">Crypto</a>
+        <a class="nav-link" href="/transactions">Transactions</a>
+        <a class="nav-link" href="#">Statistics</a>
+      </div>
+    </div>
+    <div class="navDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{currUser.username}}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item" href="/user">Profile</a></li>
+            <li><a class="dropdown-item" href="/logout">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+ </div>
+</nav>
+
+<div class="col-lg-5 mb-5 mb-lg-0">
+<div class="card">
+    <div class="card-body py-5 px-md-5">
+    <form id="edit-form" method="POST" action="/editprofile">
+
+        <div>
+            <p>Edit Profile</p>
+        </div>
+
+        <!-- Username input -->
+        <div class="form-outline mb-2">
+            <input type="text" id="inputUsername" class="form-control" name="username" value="{{currUser.username}}"/>
+            <label class="form-label" for="inputUsername">Username</label>
+        </div>
+
+        <!-- Email input -->
+        <div class="form-outline mb-2">
+            <input type="email" id="inputEmail" class="form-control" name="email" value="{{currUser.email}}"/>
+            <label class="form-label" for="inputEmail">Email address</label>
+        </div>
+
+        <!-- Gender input -->
+        <div class="form-outline mb-2">
+            <select id="inputGender" class="form-select" name="gender">
+            <option value="Female">Female</option>
+            <option value="Male">Male</option>
+            <option value="Others">Others</option>
+            </select>
+            <label for="inputGender" class="form-label">Gender</label>
+            <input type="hidden" id="genderVal" value="{{currUser.gender}}"/>
+        </div>
+
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-block mb-2 signUpBtn">
+        Submit
+        </button>
+    </form>
+    </div>
+</div>
+</div>
+
+<script>
+    (function ($) {
+        $(document).ready(function() {
+            var nameselect=$("#genderVal").val();
+            var all_select=$("#inputGender > option");
+
+            for(let i = 0;i < all_select.length; i++){
+                var svalue = all_select[i].text;
+                if(nameselect == svalue){
+                    $("#inputGender option[value='"+svalue+"']").attr("selected","selected");
+                }
+            }
+        });
+    })(jQuery);
+</script>

@@ -8,7 +8,7 @@ module.exports = {
     username = username.toLowerCase();
     return username;
   },
-  
+
   checkPassword(password, varName) {
     if (!password) throw `You must provide a ${varName}!`;
     if (typeof password !== "string") throw `${varName} must be a string!`;
@@ -16,5 +16,16 @@ module.exports = {
     let reg = /^[\S]{6,}$/;
     if (!reg.test(password)) throw `Invalid ${varName}!`;
     return password;
-  }
+  },
+
+  checkEmail(email, varName) {
+    if (!email) throw `You must provide a ${varName}!`;
+    if (typeof email !== "string") throw `${varName} must be a string!`;
+    email = email.trim();
+    let reg =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!reg.test(email)) throw `Invalid ${varName}!`;
+    email = email.toLowerCase();
+    return email;
+  },
 };

@@ -14,7 +14,7 @@
       <ul class="navbar-nav">
         <li class="nav-item dropdown">
           <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Username
+            {{currUser.username}}
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <li><a class="dropdown-item" href="/user">Profile</a></li>
@@ -26,57 +26,127 @@
  </div>
 </nav>
 
-<div class="col-lg-5 tradeCard">
-  <div class="card">
-      <div class="card-body">
-      <form>
-          <div class="form-outline mb-2">
-              <select id="inputAssetType" class="form-select">
-              <option selected>0: Stock</option>
-              <option>1: Crypto</option>
-              </select>
-              <label for="inputAssetType" class="form-label">Asset Type</label>
-          </div>
-
-
-          <div class="form-outline mb-2 cover-group">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Code" id="inputStockCode" aria-describedby="button-addon">
-              <button class="btn btn-info" type="button" id="button-addon">Search</button>
+<div>
+  <div class="col-lg-5 tradeCard tradeContent">
+    <div class="card">
+        <div class="card-body">
+        <form>
+            <div class="form-outline mb-2">
+                <select id="inputAssetType" class="form-select">
+                <option selected>Stock</option>
+                <option>Crypto</option>
+                </select>
+                <label for="inputAssetType" class="form-label">Asset Type</label>
             </div>
-            <label class="form-label" for="inputStockCode">Stock/Crypto Code</label> 
-          </div>
-          
 
-          <div class="form-outline mb-2 cover-group">
-            <input type="text" id="inputStockName" name="inputStockName" class="form-control"/>
-            <label class="form-label" for="inputStockName">Stock/Crypto Name</label>  
-          </div>
 
-          <!-- Stock Price input -->
-          <div class="form-outline mb-2 cover-group">
-            <input type="text" id="inputStockPrice" name="inputStockPrice" class="form-control"/>
-            <label class="form-label" for="inputStockPrice">Stock/Crypto Current Price</label>  
-          </div>
+            <div class="form-outline mb-2 cover-group">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Code" id="inputStockCode" aria-describedby="button-addon">
+                <button class="btn btn-info" type="button" id="button-addon">Search</button>
+              </div>
+              <label class="form-label" for="inputStockCode">Stock/Crypto Code</label> 
+            </div>
+            
 
-          <div class="form-outline mb-2">
-              <select id="inputTradeType" class="form-select">
-              <option selected>0: Buy</option>
-              <option>1: Sell</option>
-              </select>
-              <label for="inputTradeType" class="form-label">Trade Type</label>
-          </div>
+            <div class="form-outline mb-2 cover-group">
+              <input type="text" id="inputStockName" name="inputStockName" class="form-control" readonly/>
+              <label class="form-label" for="inputStockName">Stock/Crypto Name</label>  
+            </div>
 
-          <div class="form-outline mb-2 cover-group">
-            <input type="text" id="inputQuantity" name="inputQuantity" class="form-control"/>
-            <label class="form-label" for="inputQuantity">Quantity</label>  
-          </div>
+            <!-- Stock Price input -->
+            <div class="form-outline mb-2 cover-group">
+              <input type="text" id="inputStockPrice" name="inputStockPrice" class="form-control" readonly/>
+              <label class="form-label" for="inputStockPrice">Stock/Crypto Current Price</label>  
+            </div>
 
-          <!-- Submit button -->
-          <button type="submit" class="btn btn-block tradeBtn">
-          Trade
-          </button>
-      </form>
-      </div>
+            <div class="form-outline mb-2">
+                <select id="inputTradeType" class="form-select">
+                <option value="Buy">Buy</option>
+                <option value="Sell">Sell</option>
+                </select>
+                <label for="inputTradeType" class="form-label">Trade Type</label>
+            </div>
+
+            <div class="form-outline mb-2 cover-group">
+              <input type="text" id="inputQuantity" name="inputQuantity" class="form-control"/>
+              <label class="form-label" for="inputQuantity">Quantity</label>  
+            </div>
+
+            {{#each errors}}
+            <div>{{this}}</div>
+            {{/each}}
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-block tradeBtn">
+            Trade
+            </button>
+        </form>
+        </div>
+    </div>
   </div>
+
+  <!-- TradingView Widget BEGIN -->
+  <div class="tradingview-widget-container tradeContent tradeRight">
+    <div class="tradingview-widget-container__widget"></div>
+    <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/markets/indices/" rel="noopener" target="_blank"><span class="blue-text">Indices</span></a> by TradingView</div>
+    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+    {
+    "colorTheme": "light",
+    "dateRange": "1M",
+    "showChart": true,
+    "locale": "en",
+    "largeChartUrl": "",
+    "isTransparent": false,
+    "showSymbolLogo": true,
+    "showFloatingTooltip": false,
+    "width": "400",
+    "height": "660",
+    "plotLineColorGrowing": "rgba(41, 98, 255, 1)",
+    "plotLineColorFalling": "rgba(41, 98, 255, 1)",
+    "gridLineColor": "rgba(240, 243, 250, 0)",
+    "scaleFontColor": "rgba(120, 123, 134, 1)",
+    "belowLineFillColorGrowing": "rgba(41, 98, 255, 0.12)",
+    "belowLineFillColorFalling": "rgba(41, 98, 255, 0.12)",
+    "belowLineFillColorGrowingBottom": "rgba(41, 98, 255, 0)",
+    "belowLineFillColorFallingBottom": "rgba(41, 98, 255, 0)",
+    "symbolActiveColor": "rgba(41, 98, 255, 0.12)",
+    "tabs": [
+      {
+        "title": "指数",
+        "symbols": [
+          {
+            "s": "FOREXCOM:SPXUSD",
+            "d": "S&P 500"
+          },
+          {
+            "s": "FOREXCOM:NSXUSD",
+            "d": "US 100"
+          },
+          {
+            "s": "FOREXCOM:DJI",
+            "d": "Dow 30"
+          },
+          {
+            "s": "INDEX:NKY",
+            "d": "Nikkei 225"
+          },
+          {
+            "s": "INDEX:DEU40",
+            "d": "DAX Index"
+          },
+          {
+            "s": "FOREXCOM:UKXGBP",
+            "d": "UK 100"
+          }
+        ],
+        "originalTitle": "Indices"
+      }
+    ]
+  }
+    </script>
+  </div>
+  <!-- TradingView Widget END -->
 </div>
+
+<script src="/public/js/tradeSearch.js"></script>

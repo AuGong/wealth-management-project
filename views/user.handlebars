@@ -5,8 +5,8 @@
       <div class="navbar-nav">
         <a class="nav-link active" aria-current="page" href="/trade">Trade</a>
         <a class="nav-link" href="/stocks">Stocks</a>
-        <a class="nav-link" href="#">Crypto</a>
-        <a class="nav-link" href="#">Transactions</a>
+        <a class="nav-link" href="/crypto">Crypto</a>
+        <a class="nav-link" href="/transactions">Transactions</a>
         <a class="nav-link" href="#">Statistics</a>
       </div>
     </div>
@@ -14,7 +14,7 @@
       <ul class="navbar-nav">
         <li class="nav-item dropdown">
           <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Username
+            {{currUser.username}}
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <li><a class="dropdown-item" href="/user">Profile</a></li>
@@ -40,20 +40,20 @@
       <td>
         <div class="d-flex align-items-center">
           <div class="ms-3">
-            <p class="fw-normal mb-1">{{currUser}}</p>
+            <p class="fw-bold mb-1">{{currUser.username}}</p>
           </div>
         </div>
       </td>
       <td>
-        <p class="fw-normal mb-1">{{email}}</p>
+        <p class="fw-normal mb-1">{{currUser.email}}</p>
       </td>
-      <td> 
-        <p class="fw-normal mb-1">{{gender}}</p>
-        </td>
+      <td>{{currUser.gender}}</td>
       <td>
-        <button type="button" class="btn btn-link btn-sm btn-rounded">
+        <a href="/editprofile">
+          <button type="button" class="btn btn-link btn-sm btn-rounded">
           Edit
-        </button>
+          </button>
+        </a>
       </td>
     </tr>
   </tbody>
