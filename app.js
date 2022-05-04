@@ -29,7 +29,7 @@ app.use(function (req, res, next) {
   console.log("Request Routes: " + req.originalUrl);
   next();
   if (req.session) {
-    if (!req.session.username) {
+    if (!req.session.user) {
       console.log("(Non-Authenticated User)");
     } else {
       console.log("Authenticated User");
