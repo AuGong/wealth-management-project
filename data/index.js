@@ -1,6 +1,8 @@
 const usersData = require("./users");
 const stockData = require('./stocks')
+const crpytoData = require('./crpyto')
 module.exports = {
   users: usersData,
-  stocks: stockData
+  stocks: stockData,
+  crpytos: crpytoData
 };
