@@ -22,7 +22,7 @@ function checkSymbol (sym){
     if (sym.trim().length < 3 || sym.trim().length > 5){
         throw 'Error: symbol must be between 3-5 characters';
     }
-    if(!ObjectId.keys(crpytoNames).includes(sym.toUpperCase().trim())) throw `only support these crpytos: ${ObjectId.keys(crpytoNames)}`
+    if(!Object.keys(cryptoNames).includes(sym.toUpperCase().trim())) throw `only support these cryptos: ${ObjectId.keys(cryptoNames)}`
     return sym.toUpperCase().trim();
 }
 
@@ -72,10 +72,11 @@ function checkPrice(price){
 
 module.exports = {
     async insertUser(userId,symbol,number,transType,price){ 
-        // 1. symbol: crpytoCurrency symbol
-        // 2. number: the amount of crpytocoins to buy or sell               
+        // 1. symbol: cryptoCurrency symbol
+        // 2. number: the amount of cryptocoins to buy or sell               
         // 3. transType: Buy:0, Sell:1 
-        // 4. price: unit price of crpytocurrency
+        // 4. price: unit price of cryptocurrency
+        let niceAmount,nicePrice,niceSymbol,niceUserId,niceTransType
         try{
             let niceUserId = checkId(userId) // check if userId is objectId
         }catch(e){
@@ -103,21 +104,21 @@ module.exports = {
         }
 
 
-        const crpytoCollection = await cryptocurrency()
+        const cryptoCollection = await cryptocurrency()
         let crypto = crpytoCollection.findOne({symbol:niceSymbol})
         if (crypto === null) {   
             if(transType!=="0") throw `there is no ${niceSymbol} to sell` //when there is no the corresponding 
                                                                           // symbol, you can not sell
             else{
                 //in this block we create new symbol to DB and then add it to transction record
-                let newCrpyto = {
-                    crpytoId: ObjectId().toString(),
+                let newCrypto = {
+                    cryptoId: ObjectId().toString(),
                     symbol: niceSymbol,
                     coinHolders:[{"userId":niceUserId,"numberOfCoins":niceAmount}]
                 }
-                const inserInfo = await crpytoCollection.insertOne(newCrpyto)
+                const inserInfo = await cryptoCollection.insertOne(newCrypto)
                 if (!insertInfo.acknowledged || !insertInfo.insertedId)
-                    throw 'Could not add the crpytoCurrency';
+                    throw 'Could not add the cryptoCurrency';
                 else{
                     const transCollection = await transactions()
                     let newRecord = {
@@ -136,16 +137,16 @@ module.exports = {
                 }
             }
         }
-        else{ // when the crpytocurrency exists
+        else{ // when the cryptocurrency exists
             
             // when transection type is sell:
             if(niceTransType==1){
-                const crpytoWithUser = await cryptocurrency.findOne({symbol:niceSymbol,coinHolders: {$elemMatch:{userId : niceUserId} }})
-                if (crpytoWithUser===null){
-                    throw "the user dosen't hold this crpytocurrency"
+                const cryptoWithUser = await cryptocurrency.findOne({symbol:niceSymbol,coinHolders: {$elemMatch:{userId : niceUserId} }})
+                if (cryptoWithUser===null){
+                    throw "the user dosen't hold this cryptocurrency"
                 }
                 else{
-                    let coinHolders = crpytoWithUser.coinHolders
+                    let coinHolders = cryptoWithUser.coinHolders
                     let userShares // object of userId and numberOfCoins
                     coinHolders.forEach(element => {
                         if (element["userId"]===niceUserId) userShares = element
@@ -217,23 +218,24 @@ module.exports = {
         }catch(e){
             throw e
         }
-        const crpytoCollection = await crptocurrency()
-        let crpyto = crpytoCollection.find({symbol:{$regex:'.*' + niceSymbol + '.*'}})
-        if(crpyto===null){
-            throw "not find any relative crpyto"
+        const cryptoCollection = await cryptocurrency()
+        let crypto = cryptoCollection.find({symbol:{$regex:'.*' + niceSymbol + '.*'}})
+        if(crypto===null){
+            throw "not find any relative crypto"
         }
 
-        return {"crpytoName":cryptoNames[niceSymbol],"coinHolders":crpyto.coinHolders}
+        return {"cryptoName":cryptoNames[niceSymbol],"coinHolders":crypto.coinHolders}
     },
     async getPrice(symbol){
+        let niceSymbol
         try {
-            let niceSymbol = checkSymbol(symbol)
+            niceSymbol = checkSymbol(symbol)
         }catch(e){
             throw e
         }
         let binance = new ccxt.binance();
         let result = await binance.fetch_ticker(niceSymbol+'/USDT');
         console.log( result);
-        return result
+        return result.info["openPrice"]
     }
 }
