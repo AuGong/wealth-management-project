@@ -188,6 +188,7 @@ module.exports = {
                         coinHolders.push({"userId":niceUserId,"numberOfCoins":niceAmount})
                    }
                 }
+                
                 let updateInfo = await cryptocurrency.updateOne({symbol:niceSymbol},{$set:{coinHolders:coinHolders}})
                 const transCollection = await transactions() // insert a selling transection record
                     let newRecord = {
