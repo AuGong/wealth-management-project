@@ -58,26 +58,102 @@ function checkPrice(price){
     }
     return "";
 }
-router.get('/:symbol', async(req, res) =>{
-    let sym = req.params.symbol;
+router.post('/search', async(req, res) =>{
+    if(req.session.user){
+    let formData = req.body;
+    let sym = formData.stockCode;
+    let errors = [];
     let symCheck = checkSymbol(sym);
     if (symCheck.length !== 0){
-        //display an error
+        errors.push(symCheck);
+        return res.status(400).render("stocks", {
+          title: "Error",
+          authenticated: true,
+          errors: errors,
+        });
     }
     sym = sym.trim().toUpperCase();
+
+    let tempPriceOptions = priceOptions;
+    let newPath = tempPriceOptions.path.split("_");
+    newPath = newPath[0] + sym + newPath[1];
+    tempPriceOptions.path = newPath;
+    let priceResult;
+    const priceReq = https.request(tempPriceOptions, (res) => {
+        res.on('data', (d) => {
+          priceResult = d;
+        })
+      })
+    priceReq.on('error', (error) => {
+        errors.push(error);
+        return res.status(400).render("status", {
+          title: "Error",
+          authenticated: true,
+          errors: errors,
+        });
+    })
+    let tempNameOptions = nameOptions;
+    newPath = tempNameOptions.split("_");
+    newPath = newPath[0] + sym + newPath[1];
+    tempNameOptions.path = newPath;
+    let nameResult;
+    const nameReq = https.request(tempNameOptions, (res) => {
+        res.on('data', (d) => {
+          nameResult = d;
+        })
+      })
+    nameReq.on('error', (error) => {
+        errors.push(error);
+        return res.status(400).render("status", {
+          title: "Error",
+          authenticated: true,
+          errors: errors,
+        });
+    })
+    if (priceResult.length == 0 || nameResult.length == 0){
+        errors.push("Error: No stock with given symbol found");
+        return res.status(400).render("status", {
+          title: "Error",
+          authenticated: true,
+          errors: errors,
+        });
+    }
+
     let foundStock;
     try{
         foundStock = await stockData.getStockBySymbol(sym);
-        //Render the page for single stocks
     }
     catch(e){
-        //display an error
+        errors.push(e);
+        return res.status(400).render("stocks", {
+          title: "Error",
+          authenticated: true,
+          errors: errors,
+        });
     }
+    if (foundStock == null){
+        try{
+            foundStock = await stockData.createStock(sym);
+        }
+        catch(e){
+            errors.push(e);
+            return res.status(400).render("stocks", {
+                title: "Error",
+                authenticated: true,
+                errors: errors,
+            });
+        }
+    }
+    foundStock
+
+
+    
+
+}
 });
-router.post('/getstockinfo', async(req, res) =>{
+router.get('/getstockinfo/:inputStockCode', async(req, res) =>{
     if (req.session.user){
-    let formData = req.body;
-    let sym = formData.inputStockCode;
+    let sym = req.params.inputStockCode;
     let errors = [];
     let checkSym = checkSymbol(sym); //This contains a string with information about the error
     if (checkSym.length !== 0){
@@ -137,7 +213,7 @@ router.post('/getstockinfo', async(req, res) =>{
         name: nameResult[0].companyName,
         price: priceResult[0].price
     }
-    return res.status(200).render("trade", {title: "foundStockInfo", authenticated: true, foundStockInfo: result});
+    return result;
 }
 });
 
@@ -196,7 +272,7 @@ router.post('/tradestock', async (req, res) =>{
     let stockTransactionCheck;
     if (type === "Buy"){
         try{
-            stockTransactionCheck = await stockData.buyStock(userId, amount, stockId, time, price);
+            stockTransactionCheck = await stockData.buyStock(userId, amount, stockId, time, price, symbol);
         }
         catch(e){
             errors.push(e);

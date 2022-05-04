@@ -77,8 +77,9 @@ let exportedMethods = {
         }
         return foundStock;
     },
-    async buyStock (userId, amount, stockId, time, price){ //updates stockholders with amount bought, and adds a transaction, returns the updated stock
+    async buyStock (userId, amount, stockId, time, price, symbol){ //updates stockholders with amount bought, and adds a transaction, returns the updated stock
         let newAmount;
+        let newSym;
         let stockCheck = checkId(stockId, 'stock');
         let userCheck = checkId(userId, 'user');
         if (stockCheck.length !== 0){
@@ -89,6 +90,12 @@ let exportedMethods = {
         }
         try{
             newAmount = checkAmount(amount);
+        }
+        catch(e){
+            throw e;
+        }
+        try{
+            newSym = checkSymbol(symbol);
         }
         catch(e){
             throw e;
@@ -106,8 +113,13 @@ let exportedMethods = {
         } catch(e){
             throw e;
         }
-        if (foundStock == null){
-            throw 'Error: stock with given ID not found';
+        if (foundStock == null){ //If stock does not exist, add it to db
+            try{
+                foundStock = await this.createStock(newSym);
+            }
+            catch (e){
+                throw e;
+            }
         }
         let temp = {
             userId: userId,
@@ -115,6 +127,7 @@ let exportedMethods = {
         }
         let newArray = foundStock.stockholders;
         let found = false;
+        if (newArray.length != 0){
         for (let i = 0; i < newArray.length; i++){
             if (newArray[i].userId === userId){
                 newArray[i].amount += newAmount;
@@ -122,6 +135,7 @@ let exportedMethods = {
                 break;
             }
         }
+    }
         if(!found){
             newArray.push(temp);
         }
@@ -260,7 +274,7 @@ let exportedMethods = {
         return temp;
         
     },
-    async createStock(symbol, name){ //creates a stock and adds it to the db, returns the new stock
+    async createStock(symbol){ //creates a stock and adds it to the db, returns the new stock
         let newSym;
         try {
             newSym = checkSymbol(symbol);

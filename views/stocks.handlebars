@@ -27,8 +27,8 @@
 </nav>
 
 <div class="col-lg-3 stockSearch">
-  <form class="d-flex">
-        <input class="form-control" type="search" placeholder="Stock Name" aria-label="Search">
+  <form class="d-flex" method="POST" action="/stocks/search">
+        <input class="form-control" type="search" placeholder="Stock Name" aria-label="Search" id="stockCode">
         <button class="btn btn-outline-success" type="submit">Search</button>
   </form>
 </div>
