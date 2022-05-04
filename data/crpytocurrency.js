@@ -221,6 +221,7 @@ module.exports = {
         if(crpyto===null){
             throw "not find any relative crpyto"
         }
+        
         return {"crpytoName":cryptoNames[niceSymbol],"coinHolders":crpyto.coinHolders}
     }
 }
