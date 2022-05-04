@@ -1,7 +1,10 @@
 const mongoCollections = require('../config/mongoCollections');
 const crptocurrency = mongoCollections.cryptocurrency;
+const transactions = mongoCollections.transactions
 const { ObjectId } = require('mongodb');
 const { cryptocurrency } = require('../config/mongoCollections');
+const users = require('./users');
+const cryptoName = {'BTC':'Bitcoin','ETH':'Ethereum','BNB':'BNB','SOL':'Solana','XRP':'XRP'}
 
 function checkSymbol (sym){
     if (!sym){
@@ -48,14 +51,158 @@ function checkAmount(num){
     return parseInt(num);
 
 }
+
+function checkTransType(t){
+    if(!t) throw "transaction type must be provided"
+    if ( t !="0" || t !="1") throw "transaction type can only be 0 or 1"
+    return parseInt(num);
+}
+
+function checkPrice(price){
+    if(!price) throw "price must be provided"
+    if(isNaN(Number(price))) throw "price must be a number"
+    return Number(price)
+}
+
+
+
 module.exports = {
-    async create(symbol){
+    async insertUser(userId,symbol,number,transType,price){ 
+        // 1. symbol: crpytoCurrency symbol
+        // 2. number: the amount of crpytocoins to buy or sell               
+        // 3. transType: Buy:0, Sell:1 
+        // 4. price: unit price of crpytocurrency
         try{
-           let niceSymbol = checkSymbol(symbol)
+            let niceUserId = checkId(userId) // check if userId is objectId
         }catch(e){
             throw e
         }
-        const crptoCollection = await cryptocurrency();
+        try{
+            let niceAmount = checkAmount(number)
+        }catch(e){
+            throw e
+        }
+        try{
+            let niceSymbol = checkSymbol(symbol) 
+        }catch(e){
+            throw e
+        }
+        try{
+            let niceTransType = checkTransType(transType)
+        }catch(e){
+            throw e
+        }
+        try{
+            let nicePrice = checkPrice(price)
+        }catch(e){
+            throw e
+        }
 
+
+        const crpytoCollection = await cryptocurrency()
+        let crypto = crpytoCollection.findOne({symbol:niceSymbol})
+        if (crypto === null) {   
+            if(transType!=="0") throw `there is no ${niceSymbol} to sell` //when there is no the corresponding 
+                                                                          // symbol, you can not sell
+            else{
+                //in this block we create new symbol to DB and then add it to transction record
+                let newCrpyto = {
+                    crpytoId: ObjectId().toString(),
+                    symbol: niceSymbol,
+                    coinHolders:[{"userId":niceUserId,"numberOfCoins":niceAmount}]
+                }
+                const inserInfo = await crpytoCollection.insertOne(newCrpyto)
+                if (!insertInfo.acknowledged || !insertInfo.insertedId)
+                    throw 'Could not add the crpytoCurrency';
+                else{
+                    const transCollection = await transactions()
+                    let newRecord = {
+                        "userId": niceUserId ,
+	                    "assetId": "6248ac7824970de22351cdaa",
+	                    "date": Date.now(),
+	                    "transactionType": niceTransType,
+	                    "assetType": false,
+	                    "quantity": niceAmount,
+	                    "price": nicePrice
+                    }
+                   const transInsertInfo = await transCollection.insertOne(newRecord)
+                   if (!transInsertInfo.acknowledged || !transInsertInfo.insertedId)
+                    throw 'Could not add the transection record';
+
+                }
+            }
+        }
+        else{ // when the crpytocurrency exists
+            
+            // when transection type is sell:
+            if(niceTransType==1){
+                const crpytoWithUser = await cryptocurrency.findOne({symbol:niceSymbol,coinHolders: {$elemMatch:{userId : niceUserId} }})
+                if (crpytoWithUser===null){
+                    throw "the user dosen't hold this crpytocurrency"
+                }
+                else{
+                    let coinHolders = crpytoWithUser.coinHolders
+                    let userShares // object of userId and numberOfCoins
+                    coinHolders.forEach(element => {
+                        if (element["userId"]===niceUserId) userShares = element
+                    });
+                    if(userShares["numberOfCoins"] < niceAmount) throw `cannot sell more than ${originalAmount}` //holding number < selling number
+                    else{ // update holding number
+                        userShares["numberOfCoins"] -= niceAmount
+                        for (let i = 0; j < coinHolders.length; j++){
+                            if (coinHolders[i]["userId"]=== niceUserId){
+                                coinHolders[i]=userShares
+                            }
+                        }
+                        let updateInfo = await cryptocurrency.updateOne({symbol:niceSymbol},{$set:{coinHolders:coinHolders}})
+                        const transCollection = await transactions() // insert a selling transection record
+                        let newRecord = {
+                            "userId": niceUserId ,
+                            "assetId": "6248ac7824970de22351cdaa",
+                            "date": Date.now(),
+                            "transactionType": niceTransType,
+                            "assetType": false,
+                            "quantity": niceAmount,
+                            "price": nicePrice
+                        }
+                        const transInsertInfo = await transCollection.insertOne(newRecord) // insert a new transection record
+                        if (!transInsertInfo.acknowledged || !transInsertInfo.insertedId)
+                            throw 'Could not add the transection record';
+                    }
+                    
+                }
+            }
+            // when transection type is buy
+            else if (niceTransType == 0){
+                //continue to write buy
+                let coinHolders = crypto.coinHolders
+                let userShares = {}
+                for (let i=0;i<coinHolders.length;i++){
+                    if(coinHolders[i]["userId"]==niceUserId){
+                        userShares = coinHolders[i]
+                        userShares["numberOfCoins"] += niceAmount
+                        coinHolders[i] = userShares
+                        
+                    }
+                   if(Object.keys(userShares).length === 0){
+                        coinHolders.push({"userId":niceUserId,"numberOfCoins":niceAmount})
+                   }
+                }
+                let updateInfo = await cryptocurrency.updateOne({symbol:niceSymbol},{$set:{coinHolders:coinHolders}})
+                const transCollection = await transactions() // insert a selling transection record
+                    let newRecord = {
+                        "userId": niceUserId ,
+                        "assetId": "6248ac7824970de22351cdaa",
+                        "date": Date.now(),
+                        "transactionType": niceTransType,
+                        "assetType": false,
+                        "quantity": niceAmount,
+                        "price": nicePrice
+                    }
+                const transInsertInfo = await transCollection.insertOne(newRecord) // insert a new transection record
+                if (!transInsertInfo.acknowledged || !transInsertInfo.insertedId)   throw 'Could not add the transection record';
+                    
+            }
+        }
     }
 }
