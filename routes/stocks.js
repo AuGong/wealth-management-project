@@ -15,7 +15,7 @@ const priceOptions = { //Replace underscore in path with desired symbol
 const nameOptions = { //Replace underscore in path with desired symbol
     hostname: 'financialmodelingprep.com',
     port: 443,
-    path: '/api/v3/profile/AAPL?apikey=4116b7eb972d010e408e5e350e723b1a',
+    path: '/api/v3/profile/_?apikey=4116b7eb972d010e408e5e350e723b1a',
     method: 'GET'
   }
 function checkSymbol (sym){
@@ -144,11 +144,26 @@ router.post('/search', async(req, res) =>{
             });
         }
     }
-    foundStock
-
-
+    let result = {
+        stockCode: sym,
+        stockName: nameResult[0].companyName,
+        stockPrice: priceResult[0].price,
+        numberOfShares: 0,
+        marketValue: 0
+    }
+    if (foundStock.shareholders.length === 0){
+        return result;
+    }
+    else{
+        for(let i = 0; i < foundStock.shareholders.length; i++){
+            if (req.session.user._id == foundStock.shareholders[i].userId.toString()){
+                result.numberOfShares = foundStock.shareholders[i].numberOfStocks
+            }
+        }
+        result.marketValue = result.stockPrice * result.numberOfShares;
+        return result;
+    }
     
-
 }
 });
 router.get('/getstockinfo/:inputStockCode', async(req, res) =>{
@@ -158,11 +173,7 @@ router.get('/getstockinfo/:inputStockCode', async(req, res) =>{
     let checkSym = checkSymbol(sym); //This contains a string with information about the error
     if (checkSym.length !== 0){
         errors.push(checkSym);
-        return res.status(400).render("trade", {
-          title: "Error",
-          authenticated: true,
-          errors: errors,
-        });
+        return errors;
     }
     sym = sym.trim().toUpperCase();
     let tempPriceOptions = priceOptions;
@@ -177,11 +188,7 @@ router.get('/getstockinfo/:inputStockCode', async(req, res) =>{
       })
     priceReq.on('error', (error) => {
         errors.push(error);
-        return res.status(400).render("trade", {
-          title: "Error",
-          authenticated: true,
-          errors: errors,
-        });
+        return errors;
     })
     let tempNameOptions = nameOptions;
     newPath = tempNameOptions.split("_");
@@ -195,19 +202,11 @@ router.get('/getstockinfo/:inputStockCode', async(req, res) =>{
       })
     nameReq.on('error', (error) => {
         errors.push(error);
-        return res.status(400).render("trade", {
-          title: "Error",
-          authenticated: true,
-          errors: errors,
-        });
+        return errors;
     })
     if (priceResult.length == 0 || nameResult.length == 0){
         errors.push("Error: No stock with given symbol found");
-        return res.status(400).render("trade", {
-          title: "Error",
-          authenticated: true,
-          errors: errors,
-        });
+        return errors;
     }
     let result = {
         name: nameResult[0].companyName,

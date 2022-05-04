@@ -122,15 +122,15 @@ let exportedMethods = {
             }
         }
         let temp = {
-            userId: userId,
+            userId: ObjectId(userId),
             numberOfStocks: newAmount
         }
         let newArray = foundStock.stockholders;
         let found = false;
         if (newArray.length != 0){
         for (let i = 0; i < newArray.length; i++){
-            if (newArray[i].userId === userId){
-                newArray[i].amount += newAmount;
+            if (newArray[i].userId === ObjectId(userId)){
+                newArray[i].numberOfStocks += newAmount;
                 found = true;
                 break;
             }
@@ -215,7 +215,7 @@ let exportedMethods = {
         let found = false;
         let i;
         for (i = 0; i < newArray.length; i++){
-            if (newArray[i].userId === userId){
+            if (newArray[i].userId === ObjectId(userId)){
                 found = true;
                 break;
             }
@@ -224,7 +224,7 @@ let exportedMethods = {
             throw 'Error: stockholder does not own this stock';
         }
         let tempArray;
-        if (newArray[i].amount <= newAmount){
+        if (newArray[i].numberOfStocks <= newAmount){
             for (let j = 0; j < newArray.length; j++){
                 if (j != i){
                     tempArray.push(newArray[j]);
