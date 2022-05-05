@@ -2,7 +2,7 @@ var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
 var yValues = [55, -49, 44, 24, 15];
 var barColors = ["red", "green","blue","orange","brown"];
 
-new Chart("myChart", {
+new Chart("barChart", {
   type: "bar",
   data: {
     labels: xValues,
