@@ -212,9 +212,10 @@ module.exports = {
             throw "not find any relative crypto"
         }
         crypto[0].coinHolders.forEach(element=>{
-            if(element.userId===niceUserId) numberOfShares=element.numberOfCoins
+            if(element.userId===niceUserId) numberOfShares=element.numberOfCoins //change number of shares if there is the user
         });
         if(numberOfShares===0){
+            //return an empty object if not found his/her shares number
             return {}
         }else{
             marketValue = price * numberOfShares
