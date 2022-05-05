@@ -225,16 +225,16 @@ module.exports = {
 
         
     },
-    // async getPrice(symbol){
-    //     let niceSymbol
-    //     try {
-    //         niceSymbol = checkSymbol(symbol)
-    //     }catch(e){
-    //         throw e
-    //     }
-    //     let binance = new ccxt.binance();
-    //     let result = await binance.fetch_ticker(niceSymbol+'/USDT');
-    //     console.log( result);
-    //     return result.info["openPrice"]
-    // }
+    async getPrice(symbol){
+        let niceSymbol
+        try {
+            niceSymbol = checkSymbol(symbol)
+        }catch(e){
+            throw e
+        }
+        let binance = new ccxt.binance();
+        let result = await binance.fetch_ticker(niceSymbol+'/USDT');
+        console.log( result);
+        return result.info["openPrice"]
+    }
 }
