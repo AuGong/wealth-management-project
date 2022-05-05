@@ -1,13 +1,13 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a> 
+    <a class="navbar-brand" href="/trade">WebInvest</a> 
     <div class="me-auto">
       <div class="navbar-nav">
         <a class="nav-link active" aria-current="page" href="/trade">Trade</a>
-        <a class="nav-link" href="/stocks">Stocks</a>
-        <a class="nav-link" href="/crypto">Crypto</a>
-        <a class="nav-link" href="/transactions">Transactions</a>
-        <a class="nav-link" href="#">Statistics</a>
+        <a class="nav-link active" href="/stocks">Stocks</a>
+        <a class="nav-link active" href="/crypto">Crypto</a>
+        <a class="nav-link active" href="/transactions">Transactions</a>
+        <a class="nav-link active" href="/statistics">Statistics</a>
       </div>
     </div>
     <div class="navDropdown">
@@ -32,7 +32,7 @@
         <div class="card-body">
         <form method="POST" action="/stocks/tradestock">
             <div class="form-outline mb-2">
-                <select id="inputAssetType" class="form-select">
+                <select id="inputAssetType" class="form-select" name="inputAssetType">
                 <option selected>Stock</option>
                 <option>Crypto</option>
                 </select>
@@ -42,7 +42,7 @@
 
             <div class="form-outline mb-2 cover-group">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="Code" id="inputStockCode" aria-describedby="button-addon">
+                <input type="text" class="form-control" placeholder="Code" id="inputStockCode" name="inputStockCode" aria-describedby="button-addon">
                 <button class="btn btn-info" type="button" id="button-addon">Search</button>
               </div>
               <label class="form-label" for="inputStockCode">Stock/Crypto Code</label> 
@@ -61,7 +61,7 @@
             </div>
 
             <div class="form-outline mb-2">
-                <select id="inputTradeType" class="form-select">
+                <select id="inputTradeType" class="form-select" name="inputTradeType">
                 <option value="Buy">Buy</option>
                 <option value="Sell">Sell</option>
                 </select>
@@ -87,66 +87,35 @@
   </div>
 
   <!-- TradingView Widget BEGIN -->
-  <div class="tradingview-widget-container tradeContent tradeRight">
-    <div class="tradingview-widget-container__widget"></div>
-    <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/markets/indices/" rel="noopener" target="_blank"><span class="blue-text">Indices</span></a> by TradingView</div>
-    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
-    {
-    "colorTheme": "light",
-    "dateRange": "1M",
-    "showChart": true,
-    "locale": "en",
-    "largeChartUrl": "",
-    "isTransparent": false,
-    "showSymbolLogo": true,
-    "showFloatingTooltip": false,
-    "width": "400",
-    "height": "660",
-    "plotLineColorGrowing": "rgba(41, 98, 255, 1)",
-    "plotLineColorFalling": "rgba(41, 98, 255, 1)",
-    "gridLineColor": "rgba(240, 243, 250, 0)",
-    "scaleFontColor": "rgba(120, 123, 134, 1)",
-    "belowLineFillColorGrowing": "rgba(41, 98, 255, 0.12)",
-    "belowLineFillColorFalling": "rgba(41, 98, 255, 0.12)",
-    "belowLineFillColorGrowingBottom": "rgba(41, 98, 255, 0)",
-    "belowLineFillColorFallingBottom": "rgba(41, 98, 255, 0)",
-    "symbolActiveColor": "rgba(41, 98, 255, 0.12)",
-    "tabs": [
-      {
-        "title": "指数",
-        "symbols": [
-          {
-            "s": "FOREXCOM:SPXUSD",
-            "d": "S&P 500"
-          },
-          {
-            "s": "FOREXCOM:NSXUSD",
-            "d": "US 100"
-          },
-          {
-            "s": "FOREXCOM:DJI",
-            "d": "Dow 30"
-          },
-          {
-            "s": "INDEX:NKY",
-            "d": "Nikkei 225"
-          },
-          {
-            "s": "INDEX:DEU40",
-            "d": "DAX Index"
-          },
-          {
-            "s": "FOREXCOM:UKXGBP",
-            "d": "UK 100"
-          }
-        ],
-        "originalTitle": "Indices"
-      }
-    ]
-  }
-    </script>
+<div class="tradingview-widget-container tradeContent tradeRight">
+  <div class="tradingview-widget-container__widget"></div>
+  <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/markets/stocks-usa/" rel="noopener" target="_blank"><span class="blue-text">Stock Market Today</span></a> by TradingView</div>
+  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-hotlists.js" async>
+  {
+  "colorTheme": "light",
+  "dateRange": "1M",
+  "exchange": "NASDAQ",
+  "showChart": true,
+  "locale": "en",
+  "largeChartUrl": "",
+  "isTransparent": false,
+  "showSymbolLogo": true,
+  "showFloatingTooltip": false,
+  "width": "400",
+  "height": "600",
+  "plotLineColorGrowing": "rgba(41, 98, 255, 1)",
+  "plotLineColorFalling": "rgba(41, 98, 255, 1)",
+  "gridLineColor": "rgba(240, 243, 250, 0)",
+  "scaleFontColor": "rgba(120, 123, 134, 1)",
+  "belowLineFillColorGrowing": "rgba(41, 98, 255, 0.12)",
+  "belowLineFillColorFalling": "rgba(41, 98, 255, 0.12)",
+  "belowLineFillColorGrowingBottom": "rgba(41, 98, 255, 0)",
+  "belowLineFillColorFallingBottom": "rgba(41, 98, 255, 0)",
+  "symbolActiveColor": "rgba(41, 98, 255, 0.12)"
+}
+  </script>
   </div>
-  <!-- TradingView Widget END -->
+<!-- TradingView Widget END -->
 </div>
 
 <script src="/public/js/tradeSearch.js"></script>
