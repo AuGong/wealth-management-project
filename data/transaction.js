@@ -1,5 +1,4 @@
 const mongoCollections = require('../config/mongoCollections');
-const stocks = mongoCollections.stocks;
 const transactions = mongoCollections.transactions;
 let { ObjectId } = require('mongodb');
 
