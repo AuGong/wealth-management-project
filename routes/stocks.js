@@ -3,7 +3,6 @@ const router = express.Router();
 const { ObjectId } = require('mongodb');
 const data = require('../data');
 const stockData = data.stocks;
-const xss = require('xss');
 
 const priceOptions = { //Replace underscore in path with desired symbol
     hostname: 'financialmodelingprep.com',
@@ -58,7 +57,7 @@ function checkPrice(price){
     }
     return "";
 }
-router.post('/search', async(req, res) =>{
+/* router.post('/search', async(req, res) =>{
     if(req.session.user){
     let formData = req.body;
     let sym = formData.stockCode;
@@ -214,7 +213,25 @@ router.get('/getstockinfo/:inputStockCode', async(req, res) =>{
     }
     return result;
 }
-});
+}); */
+router.get('/', async (req, res) =>{
+    if (req.session.user){
+        let errors = [];
+        let allStocks;
+        try{
+            allStocks = stockData.getAllStocks();
+        }
+        catch(e){
+            errors.push(e);
+            return res.status(400).render("stocks", {
+                title: "Error",
+                authenticated: true,
+                errors: errors,
+              });
+        }
+        return allStocks;
+    }
+})
 
 router.post('/tradestock', async (req, res) =>{
     if (req.session.user){

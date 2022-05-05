@@ -3,15 +3,6 @@ const stocks = mongoCollections.stocks;
 const transactions = mongoCollections.transactions;
 let { ObjectId } = require('mongodb');
 
-//Jiawei wrote the parts demonstrating the API
-const https = require('https');
-//const { createHmac } = require('crypto'); Not sure what this is but I didn't write this, I think, remove late if not useful
-let options = {
-    hostname: 'financialmodelingprep.com',
-    port: 443,
-    path: '/api/v3/quote-short/AAPL?apikey=4116b7eb972d010e408e5e350e723b1a',
-    method: 'GET'
-};
 //This function checks the symbol's validness, returns the all caps version of stock symbol
 function checkSymbol (sym){
     if (!sym){
@@ -319,6 +310,15 @@ let exportedMethods = {
             throw e;
         }
         return newStock;
+    },
+    async getAllStocks(){
+        const stockCollection = await stocks().catch((err) => { throw err; });
+        const allStocks = await stockCollection.find().toArray();
+        
+        for (let i = 0; i < allStocks.length; i++){
+            allStocks[i]._id = allStocks[i]._id.toString();
+        }
+        return allStocks;
     }
 }
 module.exports = exportedMethods;
