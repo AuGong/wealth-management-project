@@ -28,16 +28,16 @@ function checkSymbol (sym){
 
 function checkId(id){
     if (!id){
-        return 'Error: must provide' + ' id';
+        throw 'Error: must provide' + ' id';
     }
     if (typeof id != 'string'){
-        return 'Error: ' + ' id must be a string';
+        throw 'Error: ' + ' id must be a string';
     }
     if (id.trim().length === 0){
-        return 'Error: ' + ' id must not be empty spaces';
+        throw 'Error: ' + ' id must not be empty spaces';
     }
     if(!ObjectId.isValid(id)){
-        return 'Error: ' + ' id must be a valid ObjectId';
+        throw 'Error: ' + ' id must be a valid ObjectId';
     }
     return id.trim();
 }
@@ -95,7 +95,7 @@ module.exports = {
                     symbol: niceSymbol,
                     coinHolders:[{"userId":niceUserId,"numberOfCoins":niceAmount}]
                 }
-                const inserInfo = await cryptoCollection.insertOne(newCrypto)
+                const insertInfo = await cryptoCollection.insertOne(newCrypto)
                 if (!insertInfo.acknowledged || !insertInfo.insertedId)
                     throw 'Could not add the cryptoCurrency';
                 else{
@@ -224,6 +224,32 @@ module.exports = {
         
 
         
+    },
+    async searchAllCrypto(userId){
+        //blur search from database
+        let price, marketValue
+        let cryptos = []
+        let niceUserId = checkId(userId)
+        const cryptoCollection = await cryptocurrency()
+        let crypto = await cryptoCollection.find({coinHolders:{ $elemMatch: {userId:niceUserId}}}).toArray()
+        if(crypto.length===0){
+            throw "not find any relative crypto"
+        }
+        for(let i = 0; i < crypto.length;i++){
+            for(let j=0;j<crypto[i].coinHolders.length;j++){
+                if(crypto[i].coinHolders[j].userId===niceUserId && crypto[i].coinHolders[j].numberOfCoins !==0){
+                    let url = "https://financialmodelingprep.com/api/v3/quote/"+crypto[i].symbol+"USD?apikey=4116b7eb972d010e408e5e350e723b1a"
+                    let resp = await axios.get(url)
+                    price = resp.data[0].price
+                    marketValue = price * crypto[i].coinHolders[j].numberOfCoins
+                    cryptos.push({"symbol":crypto[i].symbol,"cryptoName":cryptoNames[crypto[i].symbol],
+                    "coinHolders":crypto[i].coinHolders[j].numberOfCoins,"currentPrice":price,"marketValue":marketValue})
+                } 
+            }
+        }
+        return cryptos
+
+         
     },
     async getPrice(symbol){
         let niceSymbol
