@@ -4,7 +4,7 @@ const data = require("../data");
 const userData = data.users;
 const validation = require("../validation");
 
-router.get('/statistics', async(req,res) =>{
+router.get('/', async(req,res) =>{
     if (req.session.user) {
         res.render("statistics", { currUser: req.session.user });
     }
