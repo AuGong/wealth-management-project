@@ -6,13 +6,13 @@ const validation = require("../validation");
 
 router.get('/', async(req,res) =>{
     if (req.session.user) {
-        res.render("transaction", { currUser: req.session.user });
+        res.render("transactions", { currUser: req.session.user });
     }
 });
 
 router.post('/', async(req,res) =>{
     if (req.session.user) {
-        res.render("transaction", { currUser: req.session.user });
+        res.render("transactions", { currUser: req.session.user });
     }
 });
 
