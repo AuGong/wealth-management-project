@@ -1,9 +1,9 @@
 const mongoCollections = require('../config/mongoCollections');
-const crptocurrency = mongoCollections.cryptocurrency;
+const cryptocurrency = mongoCollections.cryptocurrency;
 const transactions = mongoCollections.transactions
 const { ObjectId } = require('mongodb');
-const { cryptocurrency } = require('../config/mongoCollections');
 const ccxt = require("ccxt");
+const axios = require("axios")
 const users = require('./users');
 const cryptoNames = {'BTC':'Bitcoin','ETH':'Ethereum','BNB':'BNB',
 'SOL':'Solana','XRP':'XRP','LUNA':'Terra',
@@ -22,24 +22,24 @@ function checkSymbol (sym){
     if (sym.trim().length < 3 || sym.trim().length > 5){
         throw 'Error: symbol must be between 3-5 characters';
     }
-    if(!Object.keys(cryptoNames).includes(sym.toUpperCase().trim())) throw `only support these cryptos: ${ObjectId.keys(cryptoNames)}`
+    if(!Object.keys(cryptoNames).includes(sym.toUpperCase().trim())) throw `only support these cryptos: ${Object.keys(cryptoNames)}`
     return sym.toUpperCase().trim();
 }
 
-function checkId(id, type){
+function checkId(id){
     if (!id){
-        return 'Error: must provide' + type + ' id';
+        return 'Error: must provide' + ' id';
     }
     if (typeof id != 'string'){
-        return 'Error: ' + type + ' id must be a string';
+        return 'Error: ' + ' id must be a string';
     }
     if (id.trim().length === 0){
-        return 'Error: ' + type + ' id must not be empty spaces';
+        return 'Error: ' + ' id must not be empty spaces';
     }
     if(!ObjectId.isValid(id)){
-        return 'Error: ' + type + ' id must be a valid ObjectId';
+        return 'Error: ' + ' id must be a valid ObjectId';
     }
-    return "";
+    return id.trim();
 }
 
 function checkAmount(num){
@@ -58,8 +58,8 @@ function checkAmount(num){
 
 function checkTransType(t){
     if(!t) throw "transaction type must be provided"
-    if ( t !="0" || t !="1") throw "transaction type can only be 0 or 1"
-    return parseInt(num);
+    if ( t !="0" && t !="1") throw "transaction type can only be 0 or 1"
+    return t;
 }
 
 function checkPrice(price){
@@ -76,36 +76,15 @@ module.exports = {
         // 2. number: the amount of cryptocoins to buy or sell               
         // 3. transType: Buy:0, Sell:1 
         // 4. price: unit price of cryptocurrency
-        let niceAmount,nicePrice,niceSymbol,niceUserId,niceTransType
-        try{
-            let niceUserId = checkId(userId) // check if userId is objectId
-        }catch(e){
-            throw e
-        }
-        try{
-            let niceAmount = checkAmount(number)
-        }catch(e){
-            throw e
-        }
-        try{
-            let niceSymbol = checkSymbol(symbol) 
-        }catch(e){
-            throw e
-        }
-        try{
-            let niceTransType = checkTransType(transType)
-        }catch(e){
-            throw e
-        }
-        try{
-            let nicePrice = checkPrice(price)
-        }catch(e){
-            throw e
-        }
+        let niceUserId = checkId(userId) // check if userId is objectId
+        let niceAmount = checkAmount(number)
+        let niceSymbol = checkSymbol(symbol) 
+        let niceTransType = checkTransType(transType)
+        let nicePrice = checkPrice(price)
 
 
         const cryptoCollection = await cryptocurrency()
-        let crypto = crpytoCollection.findOne({symbol:niceSymbol})
+        let crypto = await cryptoCollection.findOne({symbol:niceSymbol})
         if (crypto === null) {   
             if(transType!=="0") throw `there is no ${niceSymbol} to sell` //when there is no the corresponding 
                                                                           // symbol, you can not sell
@@ -141,39 +120,45 @@ module.exports = {
             
             // when transection type is sell:
             if(niceTransType==1){
-                const cryptoWithUser = await cryptocurrency.findOne({symbol:niceSymbol,coinHolders: {$elemMatch:{userId : niceUserId} }})
+                const cryptoWithUser = await cryptoCollection.findOne({symbol:niceSymbol,coinHolders: {$elemMatch:{userId : niceUserId} }})
                 if (cryptoWithUser===null){
                     throw "the user dosen't hold this cryptocurrency"
                 }
                 else{
                     let coinHolders = cryptoWithUser.coinHolders
-                    let userShares // object of userId and numberOfCoins
+                    let userShares = {}// object of userId and numberOfCoins
                     coinHolders.forEach(element => {
                         if (element["userId"]===niceUserId) userShares = element
                     });
-                    if(userShares["numberOfCoins"] < niceAmount) throw `cannot sell more than ${originalAmount}` //holding number < selling number
-                    else{ // update holding number
-                        userShares["numberOfCoins"] -= niceAmount
-                        for (let i = 0; j < coinHolders.length; j++){
-                            if (coinHolders[i]["userId"]=== niceUserId){
-                                coinHolders[i]=userShares
+                    if(Object.keys(userShares).length===0){
+                        throw "not found this user"
+                    }else{
+                        if(userShares["numberOfCoins"] < niceAmount) throw `cannot sell more than ${niceAmount}` //holding number < selling number
+                        else{ // update holding number
+                            userShares["numberOfCoins"] -= niceAmount
+                            for (let i = 0; i < coinHolders.length; i++){
+                                if (coinHolders[i]["userId"]=== niceUserId){
+                                    coinHolders[i]=userShares
+                                }
                             }
                         }
-                        let updateInfo = await cryptocurrency.updateOne({symbol:niceSymbol},{$set:{coinHolders:coinHolders}})
+                        let updateInfo = await cryptoCollection.updateOne({symbol:niceSymbol},{$set:{coinHolders:coinHolders}})
                         const transCollection = await transactions() // insert a selling transection record
-                        let newRecord = {
-                            "userId": niceUserId ,
-                            "assetId": "6248ac7824970de22351cdaa",
-                            "date": Date.now(),
-                            "transactionType": niceTransType,
-                            "assetType": false,
-                            "quantity": niceAmount,
-                            "price": nicePrice
-                        }
+                            let newRecord = {
+                                "userId": niceUserId ,
+                                "assetId": "6248ac7824970de22351cdaa",
+                                "date": Date.now(),
+                                "transactionType": niceTransType,
+                                "assetType": false,
+                                "quantity": niceAmount,
+                                "price": nicePrice
+                            }
                         const transInsertInfo = await transCollection.insertOne(newRecord) // insert a new transection record
                         if (!transInsertInfo.acknowledged || !transInsertInfo.insertedId)
                             throw 'Could not add the transection record';
                     }
+                    
+                
                     
                 }
             }
@@ -189,12 +174,13 @@ module.exports = {
                         coinHolders[i] = userShares
                         
                     }
-                   if(Object.keys(userShares).length === 0){
-                        coinHolders.push({"userId":niceUserId,"numberOfCoins":niceAmount})
-                   }
+                   
                 }
+                if(Object.keys(userShares).length === 0){
+                    coinHolders.push({"userId":niceUserId,"numberOfCoins":niceAmount})
+               }
 
-                let updateInfo = await cryptocurrency.updateOne({symbol:niceSymbol},{$set:{coinHolders:coinHolders}})
+                let updateInfo = await cryptoCollection.updateOne({symbol:niceSymbol},{$set:{coinHolders:coinHolders}})
                 const transCollection = await transactions() // insert a selling transection record
                     let newRecord = {
                         "userId": niceUserId ,
@@ -211,20 +197,32 @@ module.exports = {
             }
         }
     },
-    async searchCrpyto(symbol){
+    async searchCrypto(symbol,userId){
         //blur search from database
-        try{
-            let niceSymbol = checkSymbol(symbol)
-        }catch(e){
-            throw e
-        }
+        let price, marketValue
+        let niceUserId = checkId(userId)
+        let numberOfShares = 0
+        let niceSymbol = checkSymbol(symbol)    
+        let url = "https://financialmodelingprep.com/api/v3/quote/"+niceSymbol+"USD?apikey=4116b7eb972d010e408e5e350e723b1a"
+        const resp = await axios.get(url)
+        price = resp.data[0].price
         const cryptoCollection = await cryptocurrency()
-        let crypto = cryptoCollection.find({symbol:{$regex:'.*' + niceSymbol + '.*'}})
-        if(crypto===null){
+        let crypto = await cryptoCollection.find({symbol:niceSymbol}).toArray()
+        if(crypto.length===0){
             throw "not find any relative crypto"
         }
+        crypto[0].coinHolders.forEach(element=>{
+            if(element.userId===niceUserId) numberOfShares=element.numberOfCoins
+        });
+        if(numberOfShares===0){
+            return {}
+        }else{
+            marketValue = price * numberOfShares
+            return {"cryptoCode":niceSymbol, "cryptoName":cryptoNames[niceSymbol],"coinHolders":numberOfShares,"currentPrice":price,"marketValue":marketValue}
+        }
+        
 
-        return {"cryptoName":cryptoNames[niceSymbol],"coinHolders":crypto.coinHolders}
+        
     },
     async getPrice(symbol){
         let niceSymbol
