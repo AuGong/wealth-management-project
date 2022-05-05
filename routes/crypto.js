@@ -4,6 +4,7 @@ const { ObjectId } = require('mongodb');
 const data = require('../data');
 const cryptoData = data.crpytos;
 
+
 const { coinspot } = require("ccxt")
 const req = require("express/lib/request")
 

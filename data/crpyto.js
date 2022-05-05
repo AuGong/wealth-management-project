@@ -153,6 +153,7 @@ module.exports = {
                                 "quantity": niceAmount,
                                 "price": nicePrice
                             }
+                            
                         const transInsertInfo = await transCollection.insertOne(newRecord) // insert a new transection record
                         if (!transInsertInfo.acknowledged || !transInsertInfo.insertedId)
                             throw 'Could not add the transection record';
