@@ -67,9 +67,6 @@ function checkPrice(price){
     if(isNaN(Number(price))) throw "price must be a number"
     return Number(price)
 }
-
-
-
 module.exports = {
     async insertUser(userId,assetType,symbol,number,transType,price){ 
         // 1. symbol: cryptoCurrency symbol
@@ -103,7 +100,7 @@ module.exports = {
                     const transCollection = await transactions()
                     let newRecord = {
                         "userId": niceUserId ,
-	                    "assetId": niceSymbol,
+	                    "symbol": niceSymbol,
 	                    "date": Date.now(),
 	                    "transactionType": niceTransType,
 	                    "assetType": 'Crypto',
@@ -186,7 +183,7 @@ module.exports = {
                 const transCollection = await transactions() // insert a selling transection record
                     let newRecord = {
                         "userId": niceUserId ,
-                        "assetId": "6248ac7824970de22351cdaa",
+                        "symbol": niceSymbol,
                         "date": Date.now(),
                         "transactionType": niceTransType,
                         "assetType": false,
@@ -242,6 +239,9 @@ module.exports = {
                 if(crypto[i].coinHolders[j].userId===niceUserId && crypto[i].coinHolders[j].numberOfCoins !==0){
                     let url = "https://financialmodelingprep.com/api/v3/quote/"+crypto[i].symbol+"USD?apikey=4116b7eb972d010e408e5e350e723b1a"
                     let resp = await axios.get(url)
+                    setTimeout(() => {
+                        console.log("go_to_sleep")
+                    }, 500);
                     price = resp.data[0].price
                     marketValue = price * crypto[i].coinHolders[j].numberOfCoins
                     cryptos.push({"symbol":crypto[i].symbol,"cryptoName":cryptoNames[crypto[i].symbol],
