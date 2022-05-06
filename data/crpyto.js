@@ -58,7 +58,7 @@ function checkAmount(num){
 
 function checkTransType(t){
     if(!t) throw "transaction type must be provided"
-    if ( t !="0" && t !="1") throw "transaction type can only be 0 or 1"
+    if ( t !="Buy" && t !="Sell") throw "transaction type can only be Buy or Sell"
     return t;
 }
 
@@ -71,22 +71,23 @@ function checkPrice(price){
 
 
 module.exports = {
-    async insertUser(userId,symbol,number,transType,price){ 
+    async insertUser(userId,assetType,symbol,number,transType,price){ 
         // 1. symbol: cryptoCurrency symbol
         // 2. number: the amount of cryptocoins to buy or sell               
-        // 3. transType: Buy:0, Sell:1 
+        // 3. transType: Buy, Sell
         // 4. price: unit price of cryptocurrency
         let niceUserId = checkId(userId) // check if userId is objectId
         let niceAmount = checkAmount(number)
         let niceSymbol = checkSymbol(symbol) 
         let niceTransType = checkTransType(transType)
         let nicePrice = checkPrice(price)
-
-
+        if(assetType!=='crypto'){
+            throw "you only buy crypto property!"
+        }
         const cryptoCollection = await cryptocurrency()
         let crypto = await cryptoCollection.findOne({symbol:niceSymbol})
         if (crypto === null) {   
-            if(transType!=="0") throw `there is no ${niceSymbol} to sell` //when there is no the corresponding 
+            if(transType!=="Buy") throw `there is no ${niceSymbol} to sell` //when there is no the corresponding 
                                                                           // symbol, you can not sell
             else{
                 //in this block we create new symbol to DB and then add it to transction record
@@ -119,7 +120,7 @@ module.exports = {
         else{ // when the cryptocurrency exists
             
             // when transection type is sell:
-            if(niceTransType==1){
+            if(niceTransType==="Sell"){
                 const cryptoWithUser = await cryptoCollection.findOne({symbol:niceSymbol,coinHolders: {$elemMatch:{userId : niceUserId} }})
                 if (cryptoWithUser===null){
                     throw "the user dosen't hold this cryptocurrency"
@@ -164,7 +165,7 @@ module.exports = {
                 }
             }
             // when transection type is buy
-            else if (niceTransType == 0){
+            else if (niceTransType === "Buy"){
                 //continue to write buy
                 let coinHolders = crypto.coinHolders
                 let userShares = {}
