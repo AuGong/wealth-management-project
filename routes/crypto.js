@@ -72,7 +72,8 @@ router.post('/tradecryto',async(req,res)=>{
         let transType = tradeInfo.inputTradeType
         let price = tradeInfo.inputStockPrice
         try{
-            let data = await cryptoData.insertUser(userId,assetType,symbol,number,transType,price)
+            await cryptoData.insertUser(userId,assetType,symbol,number,transType,price)
+            res.redirect("/trade");
             }catch(e){
                 errors.push(e)
                 res.status(500).render("crypto",{errors: errors})
