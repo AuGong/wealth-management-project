@@ -10,13 +10,13 @@
         if (searchCode) {
             if (assetType === "Stock") {
                 var searchConfig = {
-                    method: "GET",
-                    url: `https://financialmodelingprep.com/api/v3/quote/${searchCode}?apikey=4116b7eb972d010e408e5e350e723b1a`,
+                  method: "GET",
+                  url: `https://financialmodelingprep.com/api/v3/quote/${searchCode}?apikey=14bf083323c7d4f37ef667f48d105a93`,
                 };
             } else {
                 var searchConfig = {
                   method: "GET",
-                  url: `https://financialmodelingprep.com/api/v3/quote/${searchCode}USD?apikey=4116b7eb972d010e408e5e350e723b1a`,
+                  url: `https://financialmodelingprep.com/api/v3/quote/${searchCode}USD?apikey=14bf083323c7d4f37ef667f48d105a93`,
                 };
                 $("#tradeForm").attr("action", "/crypto/tradecrypto");
             }
