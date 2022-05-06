@@ -81,7 +81,7 @@ module.exports = {
         let niceSymbol = checkSymbol(symbol) 
         let niceTransType = checkTransType(transType)
         let nicePrice = checkPrice(price)
-        if(assetType!=='crypto'){
+        if(assetType!=='Crypto'){
             throw "you only buy crypto property!"
         }
         const cryptoCollection = await cryptocurrency()
@@ -103,10 +103,10 @@ module.exports = {
                     const transCollection = await transactions()
                     let newRecord = {
                         "userId": niceUserId ,
-	                    "assetId": "6248ac7824970de22351cdaa",
+	                    "assetId": niceSymbol,
 	                    "date": Date.now(),
 	                    "transactionType": niceTransType,
-	                    "assetType": false,
+	                    "assetType": 'Crypto',
 	                    "quantity": niceAmount,
 	                    "price": nicePrice
                     }
@@ -147,10 +147,10 @@ module.exports = {
                         const transCollection = await transactions() // insert a selling transection record
                             let newRecord = {
                                 "userId": niceUserId ,
-                                "assetId": "6248ac7824970de22351cdaa",
+                                "symbol": niceSymbol,
                                 "date": Date.now(),
                                 "transactionType": niceTransType,
-                                "assetType": false,
+                                "assetType": 'Crypto',
                                 "quantity": niceAmount,
                                 "price": nicePrice
                             }
