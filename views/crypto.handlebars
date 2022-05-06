@@ -45,19 +45,21 @@
   </thead>
   <tbody>
     <tr>
+      {{#each cryptos}}
       <td>
         <div class="d-flex align-items-center">
           <div class="ms-3">
-            <p class="fw-bold mb-1">{{cryptos.symbol}}</p>
+            <p class="fw-bold mb-1">{{this.symbol}}</p>
           </div>
         </div>
       </td>
       <td>
-        <p class="fw-normal mb-1">{{cryptos.cryptoName}}</p>
+        <p class="fw-normal mb-1">{{this.cryptoName}}</p>
       </td>
-      <td>{{cryptos.coinHolders}}</td>
-      <td>{{cryptos.currentPrice}}</td>
-      <td>{{cryptos.marketValue}}</td>
+      <td>{{this.coinHolders}}</td>
+      <td>{{this.currentPrice}}</td>
+      <td>{{this.marketValue}}</td>
+      {{/each}}
     </tr>
   </tbody>
 </table>
