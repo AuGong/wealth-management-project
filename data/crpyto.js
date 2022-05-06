@@ -153,7 +153,7 @@ module.exports = {
                                 "quantity": niceAmount,
                                 "price": nicePrice
                             }
-                            
+
                         const transInsertInfo = await transCollection.insertOne(newRecord) // insert a new transection record
                         if (!transInsertInfo.acknowledged || !transInsertInfo.insertedId)
                             throw 'Could not add the transection record';
@@ -253,15 +253,11 @@ module.exports = {
          
     },
     async getPrice(symbol){
-        let niceSymbol
-        try {
-            niceSymbol = checkSymbol(symbol)
-        }catch(e){
-            throw e
-        }
-        let binance = new ccxt.binance();
-        let result = await binance.fetch_ticker(niceSymbol+'/USDT');
-        console.log( result);
-        return result.info["openPrice"]
+        let niceSymbol = checkSymbol(symbol)
+        let url = "https://financialmodelingprep.com/api/v3/quote/"+niceSymbol+"USD?apikey=4116b7eb972d010e408e5e350e723b1a"
+        let resp = await axios.get(url)
+        let price = resp.data[0].price
+        let name = cryptoNames[niceSymbol]
+        return {"price":price,"cryptoName":name}
     }
 }
