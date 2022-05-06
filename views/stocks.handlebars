@@ -44,11 +44,12 @@
     </tr>
   </thead>
   <tbody>
+    {{#each stocks}}
     <tr>
       <td>
         <div class="d-flex align-items-center">
           <div class="ms-3">
-            <p class="fw-bold mb-1">AAPL</p>
+            <p class="fw-bold mb-1">{{this.symbol}}</p>
           </div>
         </div>
       </td>
@@ -59,5 +60,6 @@
       <td>40</td>
       <td>600</td>
     </tr>
+    {{/each}}
   </tbody>
 </table>

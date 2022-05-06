@@ -219,7 +219,7 @@ router.get('/', async (req, res) =>{
         let errors = [];
         let allStocks;
         try{
-            allStocks = stockData.getAllStocks();
+            allStocks = await stockData.getAllStocks();
         }
         catch(e){
             errors.push(e);
@@ -229,7 +229,7 @@ router.get('/', async (req, res) =>{
                 errors: errors,
               });
         }
-        return allStocks;
+        return res.status(200).render("stocks",{stocks: allStocks, currUser: req.session.user});
     }
 })
 
@@ -243,6 +243,7 @@ router.post('/tradestock', async (req, res) =>{
     let type = formData.inputTradeType;
     let errors = [];
     let symCheck = checkSymbol(symbol);
+    //console.log("here");
     if (symCheck.length != 0){
         errors.push(symCheck);
         return res.status(400).render("trade", {
@@ -253,7 +254,8 @@ router.post('/tradestock', async (req, res) =>{
     }
     symbol = symbol.trim().toUpperCase();
     let amountCheck = checkAmount(amount);
-    if(amountCheck.length == 0){
+    //console.log("2");
+    if(amountCheck.length != 0){
         errors.push(amountCheck);
         return res.status(400).render("trade", {
           title: "Error",
@@ -263,6 +265,7 @@ router.post('/tradestock', async (req, res) =>{
     }
     amount = parseInt(amount);
     let priceCheck = checkPrice(price);
+    //console.log("3");
     if (priceCheck.length == 0){
         errors.push(priceCheck);
         return res.status(400).render("trade", {
@@ -277,14 +280,22 @@ router.post('/tradestock', async (req, res) =>{
     }
     catch(e){
         errors.push(e);
+        //console.log(e);
         return res.status(400).render("trade", {
           title: "Error",
           authenticated: true,
           errors: errors,
         });
     }
+    console.log(findStockCheck);
     let stockId = findStockCheck._id.toString();
-    let userId = req.session.user._id; 
+    let userId = req.session.id;
+   /* console.log(userId);
+    console.log(amount);
+    console.log(stockId);
+    console.log(time);
+    console.log(price);
+    console.log(symbol);*/
     let stockTransactionCheck;
     if (type === "Buy"){
         try{
@@ -292,6 +303,7 @@ router.post('/tradestock', async (req, res) =>{
         }
         catch(e){
             errors.push(e);
+            //console.log(errors);
             return res.status(400).render("trade", {
                 title: "Error",
                 authenticated: true,
@@ -312,7 +324,8 @@ router.post('/tradestock', async (req, res) =>{
             });
         }
     }
-    return res.status(200).render("trade");
+    return res.status(200).render("trade", {currUser: req.session.user });
+    //return res.status(200).render("trade");
 }
 });
 
