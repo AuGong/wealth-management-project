@@ -7,10 +7,7 @@ const statisticsRoutes = require("./statistics");
 const constructorMethod = (app) => {
   app.use('/', userRoutes);
   app.use("/stocks", stockRoutes);
-  // app.use('/crypto',cryptoRoutes);
-  app.use("/crypto", (req, res) => {
-    res.render("crypto", {});
-  });
+  app.use('/crypto',cryptoRoutes);
   app.use("/transactions", transactionRoutes);
   app.use("/statistics", statisticsRoutes);
   app.use("*", (req, res) => {
