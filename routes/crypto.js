@@ -40,7 +40,7 @@ router.get('/getPrice/:symbol',async(req,res)=>{
     }
 );
 
-router.post('/tradecryto',async(req,res)=>{
+router.post('/tradecrypto',async(req,res)=>{
     if(req.session.user){
         let errors = []
         let tradeInfo = req.body
