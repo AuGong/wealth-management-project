@@ -243,7 +243,6 @@ router.post('/tradestock', async (req, res) =>{
     let type = formData.inputTradeType;
     let errors = [];
     let symCheck = checkSymbol(symbol);
-    //console.log("here");
     if (symCheck.length != 0){
         errors.push(symCheck);
         return res.status(400).render("trade", {
@@ -254,7 +253,6 @@ router.post('/tradestock', async (req, res) =>{
     }
     symbol = symbol.trim().toUpperCase();
     let amountCheck = checkAmount(amount);
-    //console.log("2");
     if(amountCheck.length != 0){
         errors.push(amountCheck);
         return res.status(400).render("trade", {
@@ -265,7 +263,6 @@ router.post('/tradestock', async (req, res) =>{
     }
     amount = parseInt(amount);
     let priceCheck = checkPrice(price);
-    //console.log("3");
     if (priceCheck.length == 0){
         errors.push(priceCheck);
         return res.status(400).render("trade", {
@@ -280,22 +277,27 @@ router.post('/tradestock', async (req, res) =>{
     }
     catch(e){
         errors.push(e);
-        //console.log(e);
         return res.status(400).render("trade", {
           title: "Error",
           authenticated: true,
           errors: errors,
         });
     }
-    console.log(findStockCheck);
+    if (findStockCheck == null){
+        try{
+            findStockCheck = await stockData.createStock(symbol);
+        }
+        catch(e){
+            errors.push(e);
+            return res.status(400).render("trade", {
+            title: "Error",
+            authenticated: true,
+            errors: errors,
+            });
+        }
+    }
     let stockId = findStockCheck._id.toString();
-    let userId = req.session.id;
-   /* console.log(userId);
-    console.log(amount);
-    console.log(stockId);
-    console.log(time);
-    console.log(price);
-    console.log(symbol);*/
+    let userId = req.session.user._id;
     let stockTransactionCheck;
     if (type === "Buy"){
         try{

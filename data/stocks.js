@@ -120,7 +120,7 @@ let exportedMethods = {
         let found = false;
         if (newArray.length != 0){
         for (let i = 0; i < newArray.length; i++){
-            if (newArray[i].userId === ObjectId(userId)){
+            if (newArray[i].userId.toString() == userId){
                 newArray[i].numberOfStocks += newAmount;
                 found = true;
                 break;
@@ -206,7 +206,7 @@ let exportedMethods = {
         let found = false;
         let i;
         for (i = 0; i < newArray.length; i++){
-            if (newArray[i].userId === ObjectId(userId)){
+            if (newArray[i].userId.toString() == userId){
                 found = true;
                 break;
             }
@@ -214,7 +214,7 @@ let exportedMethods = {
         if (!found){
             throw 'Error: stockholder does not own this stock';
         }
-        let tempArray;
+        let tempArray = [];
         if (newArray[i].numberOfStocks <= newAmount){
             for (let j = 0; j < newArray.length; j++){
                 if (j != i){
@@ -223,7 +223,8 @@ let exportedMethods = {
             }
         }
         else{
-            tempArray = newArray[i].amount - newAmount;
+            newArray[i].numberOfStocks -= newAmount;
+            tempArray = newArray;
         }
         let updateCheck;
         try{
@@ -254,7 +255,7 @@ let exportedMethods = {
         }
         let buyInsertInfo
         try{
-            buyInsertInfo = transactionCollection.insertOne(newTransaction);
+            buyInsertInfo = await transactionCollection.insertOne(newTransaction);
         }
         catch(e){
             throw e;
@@ -262,7 +263,7 @@ let exportedMethods = {
         if (buyInsertInfo.insertedCount == 0){
             throw 'Error: failed to add purchase to transactions';
         }
-        return temp;
+        return tempArray;
         
     },
     async createStock(symbol){ //creates a stock and adds it to the db, returns the new stock
