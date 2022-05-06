@@ -14,9 +14,6 @@ function checkSymbol (sym){
     if (sym.trim().length === 0){
         throw 'Error: symbol cannot be empty strings';
     }
-    if (sym.trim().length < 3 || sym.trim().length > 5){
-        throw 'Error: symbol must be between 3-5 characters';
-    }
     return sym.toUpperCase().trim();
 }
 

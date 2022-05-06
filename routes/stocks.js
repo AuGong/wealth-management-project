@@ -28,9 +28,6 @@ function checkSymbol (sym){
     if (sym.trim().length === 0){
         return 'Error: symbol cannot be empty strings';
     }
-    if (sym.trim().length < 3 || sym.trim().length > 5){
-        return 'Error: symbol must be between 3-5 characters';
-    }
     return "";
 }
 
@@ -132,7 +129,6 @@ router.get('/', async (req, res) =>{
         }
         catch(e){
             errors.push(e);
-            console.log(e);
             return res.status(400).render("stocks", {
                 title: "Error",
                 authenticated: true,
@@ -145,14 +141,12 @@ router.get('/', async (req, res) =>{
         }
         catch(e){
             errors.push(e);
-            console.log(e);
             return res.status(400).render("stocks", {
                 title: "Error",
                 authenticated: true,
                 errors: errors,
               });
         }
-        console.log(ownedStocks);
         let result = [];
         for (let i = 0; i < allStocks.length; i++){
             let temp = {
