@@ -3,7 +3,8 @@ const router = express.Router();
 const { ObjectId } = require('mongodb');
 const data = require('../data');
 const stockData = data.stocks;
-
+const axios = require ('axios');
+/*
 const priceOptions = { //Replace underscore in path with desired symbol
     hostname: 'financialmodelingprep.com',
     port: 443,
@@ -16,7 +17,7 @@ const nameOptions = { //Replace underscore in path with desired symbol
     port: 443,
     path: '/api/v3/profile/_?apikey=4116b7eb972d010e408e5e350e723b1a',
     method: 'GET'
-  }
+  } */
 function checkSymbol (sym){
     if (!sym){
         return 'Error: must enter symbol';
@@ -56,6 +57,21 @@ function checkPrice(price){
         return 'Error: price must be greater than zero';
     }
     return "";
+}
+
+function removeElementAtIndex(arr, index){
+    if (index >= arr.length){
+        return arr;
+    }
+    else{
+        let result= [];
+        for (let i = 0; i < arr.length; i++){
+            if (index != i){
+                result.push(arr[i]);
+            }
+        }
+        return result;
+    }
 }
 /* 
 router.get('/getstockinfo/:inputStockCode', async(req, res) =>{
@@ -116,13 +132,50 @@ router.get('/', async (req, res) =>{
         }
         catch(e){
             errors.push(e);
+            console.log(e);
             return res.status(400).render("stocks", {
                 title: "Error",
                 authenticated: true,
                 errors: errors,
               });
         }
-        return res.status(200).render("stocks",{stocks: allStocks, currUser: req.session.user});
+        let ownedStocks;
+        try{
+            ownedStocks = await stockData.getAllStocksOwned(req.session.user._id);
+        }
+        catch(e){
+            errors.push(e);
+            console.log(e);
+            return res.status(400).render("stocks", {
+                title: "Error",
+                authenticated: true,
+                errors: errors,
+              });
+        }
+        console.log(ownedStocks);
+        let result = [];
+        for (let i = 0; i < allStocks.length; i++){
+            let temp = {
+                symbol: allStocks[i].symbol,
+                name: "",
+                price: 0,
+                numberOfShares: 0,
+                marketValue: 0
+            };
+            for (let j = 0; j < ownedStocks.length; j++){
+                if (ownedStocks[j].stockId == allStocks[i]._id.toString()){
+                    temp.numberOfShares = ownedStocks[j].amount;
+                    ownedStocks = removeElementAtIndex(ownedStocks, j);
+                    break;
+                }
+            }
+            let info = await axios.get(`https://financialmodelingprep.com/api/v3/quote/${allStocks[i].symbol}?apikey=4116b7eb972d010e408e5e350e723b1a`);
+            temp.price = info.data[0].price;
+            temp.name = info.data[0].name;
+            temp.marketValue = temp.numberOfShares * temp.price;
+            result.push(temp);
+        }
+        return res.status(200).render("stocks",{stocks: result, currUser: req.session.user});
     }
 })
 

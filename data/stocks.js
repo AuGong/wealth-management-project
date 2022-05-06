@@ -320,6 +320,48 @@ let exportedMethods = {
             allStocks[i]._id = allStocks[i]._id.toString();
         }
         return allStocks;
+    },
+    async getAllStocksOwned(userId){ // returns [{stockId, amount}] for all stocks a user has
+        let userCheck = checkId(userId, 'user');
+        if (userCheck.length !== 0){
+            throw userCheck;
+        }
+        let stockCollection;
+        try{
+            stockCollection = await stocks();
+        }
+        catch(e){
+            throw e;
+        }
+        let findMatchingStocks;
+        try{
+            findMatchingStocks = await stockCollection.find({'stockholders.userId': ObjectId(userId)}).toArray();
+        }
+        catch(e){
+            throw e;
+        }
+        if (findMatchingStocks.length != 0){ //I know I could just iterate through the cursor but I don't want to have to deal with any potential issues with cursors
+             //This might just be toArray, but idk what mongo returns if nothing is found
+            let result = [];
+            for (let i = 0; i < findMatchingStocks.length; i++){
+                let temp = {
+                    stockId: findMatchingStocks[i]._id.toString(),
+                    amount: 0
+                }
+                for (let j = 0; j < findMatchingStocks[i].stockholders.length; j++){
+                    if (userId == findMatchingStocks[i].stockholders[j].userId.toString()){
+                        temp.amount = findMatchingStocks[i].stockholders[j].numberOfStocks;
+                        break;
+                    }
+                }
+                result.push(temp);
+            }
+            return result;
+        }
+        else{
+            return [];
+        }
+        
     }
 }
 module.exports = exportedMethods;
