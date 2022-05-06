@@ -30,11 +30,11 @@
   <div class="col-lg-5 tradeCard tradeContent">
     <div class="card">
         <div class="card-body">
-        <form method="POST" action="/stocks/tradestock">
+        <form id="tradeForm" method="POST" action="/stocks/tradestock">
             <div class="form-outline mb-2">
                 <select id="inputAssetType" class="form-select" name="inputAssetType">
-                <option selected>Stock</option>
-                <option>Crypto</option>
+                <option value="Stock" selected>Stock</option>
+                <option value="Crypto">Crypto</option>
                 </select>
                 <label for="inputAssetType" class="form-label">Asset Type</label>
             </div>
