@@ -163,7 +163,11 @@ router.get('/', async (req, res) =>{
                     break;
                 }
             }
-            let info = await axios.get(`https://financialmodelingprep.com/api/v3/quote/${allStocks[i].symbol}?apikey=4116b7eb972d010e408e5e350e723b1a`);
+            let info = await axios.get(`https://financialmodelingprep.com/api/v3/quote/${allStocks[i].symbol}?apikey=14bf083323c7d4f37ef667f48d105a93`);
+            //4116b7eb972d010e408e5e350e723b1a
+            setTimeout(() => {
+                console.log("sleep");
+            }, 500);
             temp.price = info.data[0].price;
             temp.name = info.data[0].name;
             temp.marketValue = temp.numberOfShares * temp.price;
