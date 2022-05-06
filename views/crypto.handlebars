@@ -48,16 +48,16 @@
       <td>
         <div class="d-flex align-items-center">
           <div class="ms-3">
-            <p class="fw-bold mb-1">BTC</p>
+            <p class="fw-bold mb-1">{{cryptos.symbol}}</p>
           </div>
         </div>
       </td>
       <td>
-        <p class="fw-normal mb-1">Bitcoin</p>
+        <p class="fw-normal mb-1">{{cryptos.cryptoName}}</p>
       </td>
-      <td>30</td>
-      <td>40</td>
-      <td>600</td>
+      <td>{{cryptos.coinHolders}}</td>
+      <td>{{cryptos.currentPrice}}</td>
+      <td>{{cryptos.marketValue}}</td>
     </tr>
   </tbody>
 </table>
