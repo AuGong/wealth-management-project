@@ -46,11 +46,12 @@
     </tr>
   </thead>
   <tbody>
+    {{#each userTransactions}}
     <tr>
       <td>
         <div class="d-flex align-items-center">
           <div class="ms-3">
-            <p class="fw-bold mb-1">2022-1-1</p>
+            <p class="fw-bold mb-1">{{this.date}}</p>
           </div>
         </div>
       </td>
@@ -63,5 +64,6 @@
       <td>60</td>
       <td>100</td>
     </tr>
+    {{/each}}
   </tbody>
 </table>
