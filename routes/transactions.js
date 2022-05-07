@@ -27,7 +27,7 @@ router.get('/', async(req,res) =>{
     }
 });
 
-router.post('/searchBySymbol', async(req,res) =>{
+router.post('/', async(req,res) =>{
     if (req.session.user) {
         let userId = req.session.user._id;
         let symbol = req.body.inputStockCode;
