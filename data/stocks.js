@@ -375,7 +375,36 @@ let exportedMethods = {
         else{
             return [];
         }
-        
+    },
+    async getMatchingStocks(symbol){
+        let symCheck;
+        try{
+            symCheck = checkSymbol(symbol);
+        }
+        catch(e){
+            throw e;
+        }
+        let stockCollection;
+        try{
+            stockCollection = await stocks();
+        }
+        catch(e){
+            throw e;
+        }
+        let allStocks; //I recognize this is inefficent, but I couldn't get it to work with pure mongo
+        try{
+            allStocks = await this.getAllStocks();
+        }
+        catch(e){
+            throw e;
+        }
+        let result = [];
+        for (let i = 0; i < allStocks.length; i++){
+            if (allStocks[i].symbol.includes(symCheck)){
+                result.push(allStocks[i]);
+            }
+        }
+        return result;
     }
 }
 module.exports = exportedMethods;

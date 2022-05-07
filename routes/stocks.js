@@ -4,6 +4,7 @@ const { ObjectId } = require('mongodb');
 const data = require('../data');
 const stockData = data.stocks;
 const axios = require ('axios');
+const xss = require ('xss');
 /*
 const priceOptions = { //Replace underscore in path with desired symbol
     hostname: 'financialmodelingprep.com',
@@ -120,6 +121,30 @@ router.get('/getstockinfo/:inputStockCode', async(req, res) =>{
     return result;
 }
 }); */
+router.post('/search', async (req, res) => {
+    if (req.session.user){
+        let sym = xss(req.body.stockCode);
+        let symCheck = checkSymbol(sym);
+        let errors = [];
+        if (symCheck.length != 0){
+            errors.push(symCheck);
+            return res.status(400).render("stocks", {
+                title: "Error",
+                authenticated: true,
+                errors: errors,
+              });
+        }
+        sym = sym.trim().toUpperCase();
+
+        return res.status(200).redirect(`/stocks/${sym}`);
+    }
+    else{
+        return res.status(403).redirect('/login');
+    }
+})
+router.get('/:symbol', async (req, res) =>{
+    
+})
 router.get('/', async (req, res) =>{
     if (req.session.user){
         let errors = [];
@@ -170,21 +195,24 @@ router.get('/', async (req, res) =>{
             }, 500);
             temp.price = info.data[0].price;
             temp.name = info.data[0].name;
-            temp.marketValue = temp.numberOfShares * temp.price;
+            temp.marketValue = Math.round(temp.numberOfShares * temp.price * 100) / 100;
             result.push(temp);
         }
         return res.status(200).render("stocks",{stocks: result, currUser: req.session.user});
+    }
+    else{
+        return res.status(403).redirect('/login');
     }
 })
 
 router.post('/tradestock', async (req, res) =>{
     if (req.session.user){
     let formData = req.body;
-    let amount = formData.inputQuantity;
-    let price = formData.inputStockPrice;
-    let symbol = formData.inputStockCode;
+    let amount = xss(formData.inputQuantity);
+    let price = xss(formData.inputStockPrice);
+    let symbol = xss(formData.inputStockCode);
     let time = Date.now();
-    let type = formData.inputTradeType;
+    let type = xss(formData.inputTradeType);
     let errors = [];
     let symCheck = checkSymbol(symbol);
     if (symCheck.length != 0){
