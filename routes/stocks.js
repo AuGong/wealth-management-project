@@ -207,7 +207,7 @@ router.post('/tradestock', async (req, res) =>{
     }
     amount = parseInt(amount);
     let priceCheck = checkPrice(price);
-    if (priceCheck.length == 0){
+    if (priceCheck.length != 0){
         errors.push(priceCheck);
         return res.status(400).render("trade", {
           title: "Error",
