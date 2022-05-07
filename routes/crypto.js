@@ -47,23 +47,23 @@ router.post('/tradecrypto',async(req,res)=>{
         //userId,symbol:inputStockCode,number:inputStockName,transType:inputTradeType,price:inputStockPrice
         if(!tradeInfo){
             errors.push('you must provide trade infomation')
-            res.status(400).render("trade",{errors:errors})
+            res.status(400).render("trade",{errors:errors,currUser: req.session.user})
         }
         if(!tradeInfo.inputAssetType||!tradeInfo.inputStockCode ||!tradeInfo.inputStockName||!tradeInfo.inputTradeType||!tradeInfo.inputStockPrice||!tradeInfo.inputQuantity){
             errors.push('you must provide assettype,stockcode,stockname,tradetype, tradeprice and quantity')
-            res.status(400).render("trade",{errors:errors})
+            res.status(400).render("trade",{errors:errors,currUser: req.session.user})
         }
         if(typeof tradeInfo.inputAssetType !=='string' || typeof tradeInfo.inputStockCode!=='string' || typeof tradeInfo.inputStockName !== 'string'|| typeof tradeInfo.inputTradeType !=='string'){
             errors.push('assettype,stockcode,stockname,tradetype must be a string')
-            res.status(400).render("trade",{errors:errors})
+            res.status(400).render("trade",{errors:errors,currUser: req.session.user})
         }
         if(tradeInfo.inputAssetType.trim().length ===0 || tradeInfo.inputStockCode.trim().length === 0 || tradeInfo.inputStockName.trim().length === 0|| tradeInfo.inputTradeType.trim().length === 0){
             errors.push('assettype,stockcode,stockname,tradetype cannot be empty spaces string')
-            res.status(400).render("trade",{errors:errors})
+            res.status(400).render("trade",{errors:errors,currUser: req.session.user})
         }
         if( isNaN(Number(tradeInfo.inputStockPrice))|| isNaN(Number(tradeInfo.inputQuantity))){
             errors.push('stockPrice and quantity must be a number')
-            res.status(400).render("trade",{errors:errors})
+            res.status(400).render("trade",{errors:errors,currUser: req.session.user})
         }
         let userId=req.session.user._id;
         let assetType=tradeInfo.inputAssetType
@@ -76,7 +76,7 @@ router.post('/tradecrypto',async(req,res)=>{
             res.redirect("/trade");
             }catch(e){
                 errors.push(e)
-                res.status(500).render("crypto",{errors: errors})
+                res.status(500).render("trade",{errors: errors,currUser: req.session.user})
             }
     }
 
