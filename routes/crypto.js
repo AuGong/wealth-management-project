@@ -19,6 +19,9 @@ router.get('/',async(req,res)=>{
     }else{
         res.status(403).redirect('/login')
     }
+    else{
+        return res.status(403).redirect('/login');
+    }
     
 });
 
