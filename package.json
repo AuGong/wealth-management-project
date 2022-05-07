@@ -10,12 +10,9 @@
   "author": "Jiawei Lu 20007605, Audrey Gong 10451184",
   "license": "MIT",
   "dependencies": {
-    "@alpacahq/alpaca-trade-api": "^2.13.0",
     "axios": "^0.21.1",
-    "ccxt": "^1.77.81",
     "colors": "^1.4.0",
     "mongodb": "^4.5.0",
-    "yahoo-stock-prices": "^1.1.0",
     "bcryptjs": "^2.4.3",
     "express": "^4.17.3",
     "express-handlebars": "^6.0.3",
