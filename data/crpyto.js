@@ -218,7 +218,7 @@ module.exports = {
             return {}
         }else{
             marketValue = price * numberOfShares
-            return {"cryptoCode":niceSymbol, "cryptoName":cryptoNames[niceSymbol],"coinHolders":numberOfShares,"currentPrice":price,"marketValue":marketValue}
+            return {"cryptoCode":niceSymbol, "cryptoName":cryptoNames[niceSymbol],"lowerName":cryptoNames[niceSymbol].toLowerCase(),"coinHolders":numberOfShares,"currentPrice":price,"marketValue":marketValue}
         }
         
 
@@ -244,7 +244,7 @@ module.exports = {
                     }, 500);
                     price = resp.data[0].price
                     marketValue = price * crypto[i].coinHolders[j].numberOfCoins
-                    cryptos.push({"symbol":crypto[i].symbol,"cryptoName":cryptoNames[crypto[i].symbol],
+                    cryptos.push({"symbol":crypto[i].symbol,"cryptoName":cryptoNames[crypto[i].symbol],"lowerName":cryptoNames[niceSymbol].toLowerCase(),
                     "coinHolders":crypto[i].coinHolders[j].numberOfCoins,"currentPrice":price,"marketValue":marketValue})
                 } 
             }
