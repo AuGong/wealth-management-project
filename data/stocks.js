@@ -342,7 +342,7 @@ let exportedMethods = {
             let result = [];
             for (let i = 0; i < findMatchingStocks.length; i++){
                 let temp = {
-                    stockId: findMatchingStocks[i]._id.toString(),
+                    symbol: findMatchingStocks[i].symbol,
                     amount: 0
                 }
                 for (let j = 0; j < findMatchingStocks[i].stockholders.length; j++){
