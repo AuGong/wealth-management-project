@@ -318,7 +318,7 @@ let exportedMethods = {
         }
         return allStocks;
     },
-    async getAllStocksOwned(userId){ // returns [{stockId, amount}] for all stocks a user has
+    async getAllStocksOwned(userId){ // returns [{symbol, amount}] for all stocks a user has
         let userCheck = checkId(userId, 'user');
         if (userCheck.length !== 0){
             throw userCheck;
