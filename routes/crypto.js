@@ -17,6 +17,9 @@ router.get('/',async(req,res)=>{
             res.status(500).render("crypto",{errors: errors, currUser: req.session.user})
         }
     }
+    else{
+        return res.status(403).redirect('/login');
+    }
     
 });
 
