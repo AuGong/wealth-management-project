@@ -3,6 +3,8 @@ const router = express.Router();
 const { ObjectId } = require('mongodb');
 const data = require('../data');
 const cryptoData = data.crpytos;
+const xss = require ('xss');
+
 
 router.get('/',async(req,res)=>{
     errors = [];
@@ -20,8 +22,10 @@ router.get('/',async(req,res)=>{
 
 router.post('/',async(req,res)=>{
     if(req.session.user){
+        let data = req.body
+        let symbol = xss(data.inputStockCode)
         try{
-            let data = await cryptoData.searchCrypto(req.symbol,req.session.user._id)
+            let data = await cryptoData.searchCrypto(symbol,req.session.user._id)
             res.render("crypto",{"cryptoCode":data.symbol, "cryptoName":data.cryptoName,"coinHolders":data.coinHolders,"currentPrice":data.currentPrice,"marketValue":data.marketValue})
         }catch(e){
             res.status(500).json({})
@@ -45,32 +49,36 @@ router.post('/tradecrypto',async(req,res)=>{
         let errors = []
         let tradeInfo = req.body
         //userId,symbol:inputStockCode,number:inputStockName,transType:inputTradeType,price:inputStockPrice
+        
+        let userId=req.session.user._id;
+        let assetType=xss(tradeInfo.inputAssetType)
+        let symbol = xss(tradeInfo.inputStockCode)
+        let number= xss(tradeInfo.inputQuantity)
+        let transType = xss(tradeInfo.inputTradeType)
+        let price = xss(tradeInfo.inputStockPrice)
+        let name = xss(tradeInfo.inputStockName)
+        
         if(!tradeInfo){
             errors.push('you must provide trade infomation')
             res.status(400).render("trade",{errors:errors,currUser: req.session.user})
         }
-        if(!tradeInfo.inputAssetType||!tradeInfo.inputStockCode ||!tradeInfo.inputStockName||!tradeInfo.inputTradeType||!tradeInfo.inputStockPrice||!tradeInfo.inputQuantity){
+        if(!assetType||!symbol ||!name||!transType||!price||!number){
             errors.push('you must provide assettype,stockcode,stockname,tradetype, tradeprice and quantity')
             res.status(400).render("trade",{errors:errors,currUser: req.session.user})
         }
-        if(typeof tradeInfo.inputAssetType !=='string' || typeof tradeInfo.inputStockCode!=='string' || typeof tradeInfo.inputStockName !== 'string'|| typeof tradeInfo.inputTradeType !=='string'){
+        if(typeof assetType !=='string' || typeof symbol!=='string' || typeof name !== 'string'|| typeof transType !=='string'){
             errors.push('assettype,stockcode,stockname,tradetype must be a string')
             res.status(400).render("trade",{errors:errors,currUser: req.session.user})
         }
-        if(tradeInfo.inputAssetType.trim().length ===0 || tradeInfo.inputStockCode.trim().length === 0 || tradeInfo.inputStockName.trim().length === 0|| tradeInfo.inputTradeType.trim().length === 0){
+        if(assetType.trim().length ===0 || symbol.trim().length === 0 || name.trim().length === 0|| transType.trim().length === 0){
             errors.push('assettype,stockcode,stockname,tradetype cannot be empty spaces string')
             res.status(400).render("trade",{errors:errors,currUser: req.session.user})
         }
-        if( isNaN(Number(tradeInfo.inputStockPrice))|| isNaN(Number(tradeInfo.inputQuantity))){
+        if( isNaN(Number(price))|| isNaN(Number(number))){
             errors.push('stockPrice and quantity must be a number')
             res.status(400).render("trade",{errors:errors,currUser: req.session.user})
         }
-        let userId=req.session.user._id;
-        let assetType=tradeInfo.inputAssetType
-        let symbol = tradeInfo.inputStockCode
-        let number= tradeInfo.inputQuantity
-        let transType = tradeInfo.inputTradeType
-        let price = tradeInfo.inputStockPrice
+        
         try{
             await cryptoData.insertUser(userId,assetType,symbol,number,transType,price)
             res.redirect("/trade");
