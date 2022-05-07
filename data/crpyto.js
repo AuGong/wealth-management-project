@@ -244,7 +244,7 @@ module.exports = {
                     }, 500);
                     price = resp.data[0].price
                     marketValue = price * crypto[i].coinHolders[j].numberOfCoins
-                    cryptos.push({"symbol":crypto[i].symbol,"cryptoName":cryptoNames[crypto[i].symbol],"lowerName":cryptoNames[niceSymbol].toLowerCase(),
+                    cryptos.push({"symbol":crypto[i].symbol,"cryptoName":cryptoNames[crypto[i].symbol],"lowerName":cryptoNames[crypto[i].symbol].toLowerCase(),
                     "coinHolders":crypto[i].coinHolders[j].numberOfCoins,"currentPrice":price,"marketValue":marketValue})
                 } 
             }
