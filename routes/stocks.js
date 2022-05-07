@@ -157,7 +157,7 @@ router.get('/', async (req, res) =>{
                 marketValue: 0
             };
             for (let j = 0; j < ownedStocks.length; j++){
-                if (ownedStocks[j].stockId == allStocks[i]._id.toString()){
+                if (ownedStocks[j].symbol == allStocks[i].symbol){
                     temp.numberOfShares = ownedStocks[j].amount;
                     ownedStocks = removeElementAtIndex(ownedStocks, j);
                     break;

@@ -19,10 +19,10 @@ module.exports = {
     return data;
   },
 
-  async getUserTransactionsBySymbol(symbol) {
+  async getUserTransactionsBySymbol(userId, symbol) {
     const transactionsCollection = await transactions();
     let data = await transactionsCollection
-      .find({ userId: userId, symbol: foundSymbol })
+      .find({ userId: userId, symbol: symbol })
       .sort({ date: -1 })
       .toArray();
     return data;
@@ -39,7 +39,8 @@ module.exports = {
     if (strDate >= 0 && strDate <= 9) {
       strDate = "0" + strDate;
     }
-    let fullDate = date.getFullYear() + seperator + nowMonth + seperator + strDate;
+    let fullDate =
+      date.getFullYear() + seperator + nowMonth + seperator + strDate;
     return fullDate;
-  }
+  },
 };

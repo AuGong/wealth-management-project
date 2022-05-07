@@ -16,7 +16,7 @@
             } else {
                 var searchConfig = {
                   method: "GET",
-                  url: `https://financialmodelingprep.com/api/v3/quote/${searchCode}USD?apikey=14bf083323c7d4f37ef667f48d105a93`,
+                  url: `http://localhost:3000/crypto/getPrice/${searchCode}`,
                 };
                 $("#tradeForm").attr("action", "/crypto/tradecrypto");
             }

@@ -318,7 +318,7 @@ let exportedMethods = {
         }
         return allStocks;
     },
-    async getAllStocksOwned(userId){ // returns [{stockId, amount}] for all stocks a user has
+    async getAllStocksOwned(userId){ // returns [{symbol, amount}] for all stocks a user has
         let userCheck = checkId(userId, 'user');
         if (userCheck.length !== 0){
             throw userCheck;
@@ -342,7 +342,7 @@ let exportedMethods = {
             let result = [];
             for (let i = 0; i < findMatchingStocks.length; i++){
                 let temp = {
-                    stockId: findMatchingStocks[i]._id.toString(),
+                    symbol: findMatchingStocks[i].symbol,
                     amount: 0
                 }
                 for (let j = 0; j < findMatchingStocks[i].stockholders.length; j++){

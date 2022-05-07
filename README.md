@@ -1,7 +1,5 @@
 # wealth-management-project
 
-
-
-April 5: sign up, login page added  
-April 28: sign up, login function all done (Owen)  
-May 2: sign-up, login, logout bug fixed, user page add
+Run the program by first running "npm install" from the command line.
+Next, you can optionally run the seed file by running "npm seed" from the command line, which is not necessary but will clear the database and create some stocks.
+Lastly, type "npm start" to run the website, hosted at http://localhost:3000

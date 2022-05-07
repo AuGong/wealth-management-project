@@ -27,8 +27,8 @@
 </nav>
 
 <div class="col-lg-3 stockSearch">
-  <form class="d-flex">
-        <input class="form-control" type="search" placeholder="Stock Name" aria-label="Search">
+  <form class="d-flex" method="POST" action="/transactions">
+        <input class="form-control" type="search" placeholder="Stock Code" aria-label="Search" name="inputStockCode">
         <button class="btn btn-outline-success" type="submit">Search</button>
   </form>
 </div>
@@ -40,7 +40,6 @@
       <th>Transaction Type</th>
       <th>Asset Type</th>
       <th>Code</th>
-      <th>Name</th>
       <th>Transaction Price</th>
       <th>Transaction Quantity</th>
     </tr>
@@ -56,13 +55,12 @@
         </div>
       </td>
       <td>
-        <p class="fw-normal mb-1">Sell</p>
+        <p class="fw-normal mb-1">{{this.transactionType}}</p>
       </td>
-      <td>Stock</td>
-      <td>AAPL</td>
-      <td>Apple</td>
-      <td>60</td>
-      <td>100</td>
+      <td>{{this.assetType}}</td>
+      <td>{{this.symbol}}</td>
+      <td>{{this.price}}</td>
+      <td>{{this.quantity}}</td>
     </tr>
     {{/each}}
   </tbody>
