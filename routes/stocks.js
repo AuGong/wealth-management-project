@@ -57,20 +57,6 @@ function checkPrice(price){
     return "";
 }
 
-function removeElementAtIndex(arr, index){
-    if (index >= arr.length){
-        return arr;
-    }
-    else{
-        let result= [];
-        for (let i = 0; i < arr.length; i++){
-            if (index != i){
-                result.push(arr[i]);
-            }
-        }
-        return result;
-    }
-}
 /* 
 router.get('/getstockinfo/:inputStockCode', async(req, res) =>{
     if (req.session.user){
@@ -141,25 +127,13 @@ router.post('/search', async (req, res) => {
     else{
         return res.status(403).redirect('/login');
     }
-})
+});
 router.get('/:symbol', async (req, res) =>{
-    
-})
+
+});
 router.get('/', async (req, res) =>{
     if (req.session.user){
         let errors = [];
-        let allStocks;
-        try{
-            allStocks = await stockData.getAllStocks();
-        }
-        catch(e){
-            errors.push(e);
-            return res.status(400).render("stocks", {
-                title: "Error",
-                authenticated: true,
-                errors: errors,
-              });
-        }
         let ownedStocks;
         try{
             ownedStocks = await stockData.getAllStocksOwned(req.session.user._id);
@@ -173,22 +147,15 @@ router.get('/', async (req, res) =>{
               });
         }
         let result = [];
-        for (let i = 0; i < allStocks.length; i++){
+        for (let i = 0; i < ownedStocks.length; i++){
             let temp = {
-                symbol: allStocks[i].symbol,
+                symbol: ownedStocks[i].symbol,
                 name: "",
                 price: 0,
-                numberOfShares: 0,
+                numberOfShares: ownedStocks[i].amount,
                 marketValue: 0
             };
-            for (let j = 0; j < ownedStocks.length; j++){
-                if (ownedStocks[j].symbol == allStocks[i].symbol){
-                    temp.numberOfShares = ownedStocks[j].amount;
-                    ownedStocks = removeElementAtIndex(ownedStocks, j);
-                    break;
-                }
-            }
-            let info = await axios.get(`https://financialmodelingprep.com/api/v3/quote/${allStocks[i].symbol}?apikey=14bf083323c7d4f37ef667f48d105a93`);
+            let info = await axios.get(`https://financialmodelingprep.com/api/v3/quote/${ownedStocks[i].symbol}?apikey=14bf083323c7d4f37ef667f48d105a93`);
             //4116b7eb972d010e408e5e350e723b1a
             setTimeout(() => {
                 console.log("sleep");
@@ -272,6 +239,7 @@ router.post('/tradestock', async (req, res) =>{
     }
     let stockId = findStockCheck._id.toString();
     let userId = req.session.user._id;
+    console.log(req.session);
     let stockTransactionCheck;
     if (type === "Buy"){
         try{
