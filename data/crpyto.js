@@ -130,7 +130,7 @@ module.exports = {
                     if(Object.keys(userShares).length===0){
                         throw "not found this user"
                     }else{
-                        if(userShares["numberOfCoins"] < niceAmount) throw `cannot sell more than ${niceAmount}` //holding number < selling number
+                        if(userShares["numberOfCoins"] < niceAmount) throw `cannot sell more than ${userShares["numberOfCoins"]}` //holding number < selling number
                         else{ // update holding number
                             userShares["numberOfCoins"] -= niceAmount
                             for (let i = 0; i < coinHolders.length; i++){
