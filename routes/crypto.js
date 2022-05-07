@@ -32,7 +32,7 @@ router.post('/',async(req,res)=>{
 router.get('/getPrice/:symbol',async(req,res)=>{    
     //this response data will be processed by front end service, so no need to render
         try{
-            let data = await cryptoData.getPrice(req.param.symbol)
+            let data = await cryptoData.getPrice(req.params.symbol)
             res.json([{"price":data.price,"name":data.cryptoName}])
         }catch(e){
             res.status(500).json([{}])
