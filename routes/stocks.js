@@ -219,6 +219,16 @@ router.post('/tradestock', async (req, res) =>{
         });
     }
     if (findStockCheck == null){
+        let checkExistence = await axios.get(`https://financialmodelingprep.com/api/v3/quote/${symbol}?apikey=14bf083323c7d4f37ef667f48d105a93`);
+        if (checkExistence.data.length == 0){
+            errors.push("Error: stock does not exist");
+            return res.status(400).render("trade", {
+                title: "Error",
+                authenticated: true,
+                errors: errors,
+                });
+        }
+        else{
         try{
             findStockCheck = await stockData.createStock(symbol);
         }
@@ -231,9 +241,9 @@ router.post('/tradestock', async (req, res) =>{
             });
         }
     }
+    }
     let stockId = findStockCheck._id.toString();
     let userId = req.session.user._id;
-    console.log(req.session);
     let stockTransactionCheck;
     if (type === "Buy"){
         try{
