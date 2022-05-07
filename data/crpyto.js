@@ -179,13 +179,13 @@ module.exports = {
                }
 
                 let updateInfo = await cryptoCollection.updateOne({symbol:niceSymbol},{$set:{coinHolders:coinHolders}})
-                const transCollection = await transactions() // insert a selling transection record
+                const transCollection = await transactions() // insert a buying transection record
                     let newRecord = {
                         "userId": niceUserId ,
                         "symbol": niceSymbol,
                         "date": Date.now(),
                         "transactionType": niceTransType,
-                        "assetType": false,
+                        "assetType": 'Crypto',
                         "quantity": niceAmount,
                         "price": nicePrice
                     }
