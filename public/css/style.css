@@ -30,7 +30,7 @@ body {
 }
 
 .logInBtn {
-    background-color: #1877f2;
+    background-color: #0072ed;
     border: none;
     border-radius: 6px;
     font-size: 20px;
@@ -42,7 +42,7 @@ body {
 }
 
 .signUpBtn {
-    background-color: #42b72a;
+    background-color: #248900;
     border: none;
     border-radius: 6px;
     font-size: 20px;
@@ -59,7 +59,7 @@ body {
 }
 
 ._1rf8 {
-    color: #96999e;
+    color: #73777e;
     font-size: x-small;
 }
 
@@ -79,7 +79,7 @@ body {
 }
 
 .tradeBtn {
-    background-color: #42b72a;
+    background-color: #248900;
     border: none;
     border-radius: 6px;
     font-size: 20px;
