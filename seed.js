@@ -17,6 +17,7 @@ const main = async () => {
     const stock6 = await stocks.createStock("WBD");
     const stock7 = await stocks.createStock("GT");
     
+    //const user1 = await users.createUser("TestU)
     await connection.closeConnection();
     console.log('Done seeding databse!');
      
