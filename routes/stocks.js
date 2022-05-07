@@ -129,7 +129,47 @@ router.post('/search', async (req, res) => {
     }
 });
 router.get('/:symbol', async (req, res) =>{
-
+    let sym = req.params.symbol;
+    let symCheck = checkSymbol(sym);
+    let errors = [];
+    if (symCheck.length !== 0){
+        errors.push(symCheck);
+            return res.status(400).render("stocks", {
+                title: "Error",
+                authenticated: true,
+                errors: errors,
+              });
+    }
+    sym = sym.trim().toUpperCase();
+    let findStock;
+    try{
+        findStock = await stockData.getStockBySymbol(sym);
+    }
+    catch (e){
+        errors.push(e);
+        return res.status(400).render("stocks", {
+            title: "Error",
+            authenticated: true,
+            errors: errors,
+          });
+    }
+    let result = [];
+    for(let i = 0; i < findStock.stockholders.length; i++){
+        if (findStock.stockholders[i].userId.toString() == req.session.user._id){
+            let info = await axios.get(`https://financialmodelingprep.com/api/v3/quote/${sym}?apikey=14bf083323c7d4f37ef667f48d105a93`);
+            let temp ={
+                symbol: sym,
+                name: info.data[0].name,
+                price: info.data[0].price,
+                numberOfShares: findStock.stockholders[i].numberOfStocks,
+                marketValue: 0
+            }
+            temp.marketValue = Math.round(temp.numberOfShares * temp.price * 100) / 100;
+            result.push(temp);
+            break;
+        }
+    }
+    return res.render("stocks", {stocks: result, currUser: req.session.user});
 });
 router.get('/', async (req, res) =>{
     if (req.session.user){
