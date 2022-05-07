@@ -56,57 +56,6 @@ function checkPrice(price){
     }
     return "";
 }
-
-/* 
-router.get('/getstockinfo/:inputStockCode', async(req, res) =>{
-    if (req.session.user){
-    let sym = req.params.inputStockCode;
-    let errors = [];
-    let checkSym = checkSymbol(sym); //This contains a string with information about the error
-    if (checkSym.length !== 0){
-        errors.push(checkSym);
-        return errors;
-    }
-    sym = sym.trim().toUpperCase();
-    let tempPriceOptions = priceOptions;
-    let newPath = tempPriceOptions.path.split("_");
-    newPath = newPath[0] + sym + newPath[1];
-    tempPriceOptions.path = newPath;
-    let priceResult;
-    const priceReq = https.request(tempPriceOptions, (res) => {
-        res.on('data', (d) => {
-          priceResult = d;
-        })
-      })
-    priceReq.on('error', (error) => {
-        errors.push(error);
-        return errors;
-    })
-    let tempNameOptions = nameOptions;
-    newPath = tempNameOptions.split("_");
-    newPath = newPath[0] + sym + newPath[1];
-    tempNameOptions.path = newPath;
-    let nameResult;
-    const nameReq = https.request(tempNameOptions, (res) => {
-        res.on('data', (d) => {
-          nameResult = d;
-        })
-      })
-    nameReq.on('error', (error) => {
-        errors.push(error);
-        return errors;
-    })
-    if (priceResult.length == 0 || nameResult.length == 0){
-        errors.push("Error: No stock with given symbol found");
-        return errors;
-    }
-    let result = {
-        name: nameResult[0].companyName,
-        price: priceResult[0].price
-    }
-    return result;
-}
-}); */
 router.post('/search', async (req, res) => {
     if (req.session.user){
         let sym = xss(req.body.stockCode);
@@ -129,6 +78,7 @@ router.post('/search', async (req, res) => {
     }
 });
 router.get('/:symbol', async (req, res) =>{
+    if(req.session.user){
     let sym = req.params.symbol;
     let symCheck = checkSymbol(sym);
     let errors = [];
@@ -170,6 +120,10 @@ router.get('/:symbol', async (req, res) =>{
         }
     }
     return res.render("stocks", {stocks: result, currUser: req.session.user});
+}
+else{
+    return res.status(403).redirect('/login');
+}
 });
 router.get('/', async (req, res) =>{
     if (req.session.user){
@@ -310,6 +264,9 @@ router.post('/tradestock', async (req, res) =>{
     }
     return res.status(200).render("trade", {currUser: req.session.user });
     //return res.status(200).render("trade");
+}
+else{
+    return res.status(403).redirect('/login');
 }
 });
 
