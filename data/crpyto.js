@@ -237,7 +237,7 @@ module.exports = {
         for(let i = 0; i < crypto.length;i++){
             for(let j=0;j<crypto[i].coinHolders.length;j++){
                 if(crypto[i].coinHolders[j].userId===niceUserId && crypto[i].coinHolders[j].numberOfCoins !==0){
-                    let url = "https://financialmodelingprep.com/api/v3/quote/"+crypto[i].symbol+"USD?apikey=4116b7eb972d010e408e5e350e723b1a"
+                    let url = "https://financialmodelingprep.com/api/v3/quote/"+crypto[i].symbol+"USD?apikey=14bf083323c7d4f37ef667f48d105a93"
                     let resp = await axios.get(url)
                     setTimeout(() => {
                         console.log("go_to_sleep")
@@ -255,7 +255,7 @@ module.exports = {
     },
     async getPrice(symbol){
         let niceSymbol = checkSymbol(symbol)
-        let url = "https://financialmodelingprep.com/api/v3/quote/"+niceSymbol+"USD?apikey=4116b7eb972d010e408e5e350e723b1a"
+        let url = "https://financialmodelingprep.com/api/v3/quote/"+niceSymbol+"USD?apikey=14bf083323c7d4f37ef667f48d105a93"
         let resp = await axios.get(url)
         let price = resp.data[0].price
         let name = cryptoNames[niceSymbol]
