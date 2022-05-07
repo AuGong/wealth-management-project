@@ -11,7 +11,7 @@ const cryptoNames = ['BTC','ETH','BNB','SOL','XRP','LUNA','ADA','DOGE','AVAX','D
 
 const main = async () => {
     const db = await connection.dbConnection();
-    await db.dropDatabase(); 
+    db.dropDatabase(); 
     const stock1 = await stocks.createStock("AAPL");
     const stock2 = await stocks.createStock("FB");
     const stock3 = await stocks.createStock("TSLA");

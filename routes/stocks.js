@@ -104,6 +104,7 @@ router.get('/:symbol', async (req, res) =>{
           });
     }
     let result = [];
+    if(findStock !== null){
     for(let i = 0; i < findStock.stockholders.length; i++){
         if (findStock.stockholders[i].userId.toString() == req.session.user._id){
             let info = await axios.get(`https://financialmodelingprep.com/api/v3/quote/${sym}?apikey=14bf083323c7d4f37ef667f48d105a93`);
@@ -119,6 +120,7 @@ router.get('/:symbol', async (req, res) =>{
             break;
         }
     }
+}
     return res.render("stocks", {stocks: result, currUser: req.session.user});
 }
 else{
