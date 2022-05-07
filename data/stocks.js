@@ -46,6 +46,19 @@ function checkAmount(num){
     return parseInt(num);
 }
 
+function checkPrice(price){
+    if (!price){
+        return 'Error: must provide price'
+    }
+    if(isNaN(Number(price))){
+        return 'Error: price must be a number';
+    }
+    if (price <= 0){
+        return 'Error: price must be greater than zero';
+    }
+    return "";
+}
+
 let exportedMethods = {
     async getStockBySymbol(symbol){
         let updatedSymbol; //to get all caps vers. of symbol
@@ -70,6 +83,7 @@ let exportedMethods = {
         let newSym;
         let stockCheck = checkId(stockId, 'stock');
         let userCheck = checkId(userId, 'user');
+        let priceCheck = checkPrice(price);
         if (stockCheck.length !== 0){
             throw stockCheck;
         }
@@ -87,6 +101,9 @@ let exportedMethods = {
         }
         catch(e){
             throw e;
+        }
+        if(priceCheck.length != 0){
+            throw priceCheck;
         }
         let stockCollection;
         try{

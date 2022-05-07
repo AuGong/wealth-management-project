@@ -47,7 +47,7 @@ function checkPrice(price){
     if (!price){
         return 'Error: must provide price'
     }
-    if(typeof price != 'number'){
+    if(isNaN(Number(price))){
         return 'Error: price must be a number';
     }
     if (price <= 0){
@@ -206,7 +206,9 @@ router.post('/tradestock', async (req, res) =>{
         }); 
     }
     amount = parseInt(amount);
+
     let priceCheck = checkPrice(price);
+    price = Number(price);   
     if (priceCheck.length != 0){
         errors.push(priceCheck);
         return res.status(400).render("trade", {
