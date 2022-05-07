@@ -141,10 +141,10 @@ let exportedMethods = {
         //Start adding purchase to transactions
         let newTransaction ={
             userId: userId,
-            assetId: stockId,
+            assetId: newSym,
             date: time,
-            transactionType: true,
-            assetType: true,
+            transactionType: "Buy",
+            assetType: "Stock",
             quantity: amount,
             price: price
         }
@@ -236,10 +236,10 @@ let exportedMethods = {
         //Start adding purchase to transactions
         let newTransaction ={
             userId: userId,
-            assetId: stockId,
+            assetId: foundStock.symbol,
             date: time,
-            transactionType: false,
-            assetType: true,
+            transactionType: "Sell",
+            assetType: "Stock",
             quantity: amount,
             price: price
         }
