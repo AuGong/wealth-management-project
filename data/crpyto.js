@@ -2,7 +2,6 @@ const mongoCollections = require('../config/mongoCollections');
 const cryptocurrency = mongoCollections.cryptocurrency;
 const transactions = mongoCollections.transactions
 const { ObjectId } = require('mongodb');
-const ccxt = require("ccxt");
 const axios = require("axios")
 const users = require('./users');
 const cryptoNames = {'BTC':'Bitcoin','ETH':'Ethereum','BNB':'BNB',
