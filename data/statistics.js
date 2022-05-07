@@ -26,8 +26,8 @@ const transactionsJs = require('./transaction.js');
   //       return names;
   // },
   module.exports = {
-  async queryAllForStatistics(){
-    let transactions = await transactionsJs.queryAll();
+  async queryAllForStatistics(userId){
+    let transactions = await transactionsJs.getUserTransactions(userId);
     let symbols = new Array();
     for (let i = 0; i<transactions.length; i++){
       if (!symbols.includes(transactions[i].symbol)) {
@@ -37,7 +37,7 @@ const transactionsJs = require('./transaction.js');
     for (let i = 0; i < symbols.length; i ++){
       var array = []
       var shift = 0
-      var data = await transactionsJs.queryByCode(symbols[i]);
+      var data = await transactionsJs.getUserTransactionsBySymbol(userId, symbols[i]);
       for (let i = 0; i < data.length; i++){
         if (data[i].transactionType == "Sell"){
           shift -= data[i].price * data[i].quantity;

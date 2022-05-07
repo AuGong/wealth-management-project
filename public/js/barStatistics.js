@@ -1,21 +1,29 @@
-var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-var yValues = [55, -49, 44, 24, 15];
-var barColors = ["red", "green","blue","orange","brown"];
+(function ($) {
+  var searchConfig = {
+    method: "GET",
+    url: `http://localhost:3000/statistics/bardata`,
+  };
 
-new Chart("barChart", {
-  type: "bar",
-  data: {
-    labels: xValues,
-    datasets: [{
-      backgroundColor: barColors,
-      data: yValues
-    }]
-  },
-  options: {
-    legend: {display: false},
-    title: {
-      display: true,
-      text: "World Wine Production 2018"
-    }
-  }
-});
+  $.ajax(searchConfig).then(function (responseMessage) {
+    var finalData = $(responseMessage);
+    new Chart("barChart", {
+      type: "bar",
+      data: {
+        labels: finalData[0].xValues,
+        datasets: [
+          {
+            backgroundColor: finalData[0].barColors,
+            data: finalData[0].yValues,
+          },
+        ],
+      },
+      options: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: "World Wine Production 2018",
+        },
+      },
+    });
+  });
+})(window.jQuery);
