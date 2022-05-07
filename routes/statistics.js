@@ -22,17 +22,21 @@ router.get('/', async(req,res) =>{
 
 router.get("/bardata", async (req, res) => {
   if (req.session.user) {
-  userId = req.session.user._id;
-  barData = await statisticsData.queryAllForStatistics(userId);
-  xValues = [];
-  yValues = [];
-  barColors = [];
-  for (let i = 0; i < barData.length; i++) {
-    xValues.push(barData[i].symbol);
-    yValues.push(barData[i].avenue);
-    barColors.push(getRandomColor());
-  }
-  res.json({ xValues: xValues, yValues: yValues, barColors: barColors });
+    userId = req.session.user._id;
+    barData = await statisticsData.queryAllForStatistics(userId);
+    xValues = [];
+    yValues = [];
+    barColors = [];
+    if (barchart.length !== 0) {
+      for (let i = 0; i < barData.length; i++) {
+        xValues.push(barData[i].symbol);
+        yValues.push(barData[i].avenue);
+        barColors.push(getRandomColor());
+      }
+      res.json({ xValues: xValues, yValues: yValues, barColors: barColors });
+    } else {
+      res.json({ xValues: xValues, yValues: yValues, barColors: barColors });
+    }
   }
 });
 
