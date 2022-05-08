@@ -1,5 +1,6 @@
 const mongoCollections = require('../config/mongoCollections');
 const transactions = mongoCollections.transactions;
+const validation = require("../public/js/validation")
 
 module.exports = {
   async getUserTransactions(userId) {
@@ -12,6 +13,10 @@ module.exports = {
   },
 
   async getUserTransactionsBySymbol(userId, symbol) {
+
+    symbol = validation.checkNormalString(symbol, "Code");
+    symbol = symbol.toUpperCase();
+
     const transactionsCollection = await transactions();
     let data = await transactionsCollection
       .find({ userId: userId, symbol: symbol })

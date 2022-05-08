@@ -35,7 +35,7 @@ router.post('/', async(req,res) =>{
         errors = [];
 
         try {
-          symbol = validation.checkNormalString(symbol, "Stock Code");
+          symbol = validation.checkNormalString(symbol, "Code");
           symbol = symbol.toUpperCase();
         } catch (e) {
           errors.push(e);
