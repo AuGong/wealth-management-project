@@ -1,5 +1,7 @@
 (function ($) {
 
+    let originalCode;
+    let toVerifyCode;
     
 
     $("#button-addon").click(function (event) {
@@ -28,6 +30,7 @@
                 } else {
                     $("#inputStockPrice").val(stockInfo[0].price);
                     $("#inputStockName").val(stockInfo[0].name);
+                    originalCode = searchCode;
                 }
             });
         } else {
@@ -35,5 +38,16 @@
         }
     });
 
+    $(document).ready(function(){
+        $("#submitBtn").click(function (event) {
+            event.preventDefault();
+            toVerifyCode = $("#inputStockCode").val().trim();
+            if (originalCode !== toVerifyCode) {
+                alert("Use search first after code changed!");
+            } else {
+                $("#tradeForm").submit();
+            }
+        });
+     });
 
 })(window.jQuery);
