@@ -37,13 +37,16 @@ function checkAmount(num){
     if (!num){
         throw 'Error: must provide amount';
     }
-    if (isNaN(parseInt(num))){
+    if (isNaN(Number(num))){
         throw 'Error: amount must be a number';
     }
-    if (parseInt(num) <= 0){
+    if (Number(num) <= 0){
         throw 'Error: amount must be greater than zero';
     }
-    return parseInt(num);
+    if(!Number.isInteger(Number(num))){
+        throw 'Error: amount must be an integer';
+    }
+    return Number(num);
 }
 
 function checkPrice(price){

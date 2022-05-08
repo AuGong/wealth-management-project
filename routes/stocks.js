@@ -36,11 +36,14 @@ function checkAmount(num){
     if (!num){
         return 'Error: must provide amount';
     }
-    if (isNaN(parseInt(num))){
+    if (isNaN(Number(num))){
         return 'Error: amount must be a number';
     }
-    if (parseInt(num) <= 0){
+    if (Number(num) <= 0){
         return 'Error: amount must be greater than zero';
+    }
+    if(!Number.isInteger(Number(num))){
+        return 'Error: amount must be an integer';
     }
     return "";
 }
@@ -153,7 +156,7 @@ router.get('/', async (req, res) =>{
             let info = await axios.get(`https://financialmodelingprep.com/api/v3/quote/${ownedStocks[i].symbol}?apikey=14bf083323c7d4f37ef667f48d105a93`);
             //4116b7eb972d010e408e5e350e723b1a
             setTimeout(() => {
-                console.log("sleep");
+                console.log("sleep"); //to prevent overloading the API with too many requests, I know this is crude but we didn't have a better solution
             }, 500);
             temp.price = info.data[0].price;
             temp.name = info.data[0].name;
