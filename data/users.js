@@ -10,6 +10,7 @@ module.exports = {
         username = validation.checkUsername(username, "Username");
         password = validation.checkPassword(password, "Password");
         email = validation.checkEmail(email, "Email");
+        gender = validation.checkNormalString(gender, "Gender");
 
         const userCollection = await users();
         let newUser = await userCollection.findOne({username: username});
@@ -30,6 +31,8 @@ module.exports = {
     },
 
     async getUserById(userId) {
+        userId = validation.checkNormalString(userId, "Database userId");
+
         const userCollection = await users();
         let user = await userCollection.findOne({ _id: ObjectId(userId) });
         if (user === null) throw 'No user with that id.';
@@ -53,8 +56,10 @@ module.exports = {
     },
 
     async updateUser(id, username, email, gender) {
+        id = validation.checkNormalString(id, "Database userId");
         username = validation.checkUsername(username, "Username");
         email = validation.checkEmail(email, "Email");
+        gender = validation.checkNormalString(gender, "Gender");
 
         const userCollection = await users();
         const updateUser = {
@@ -62,6 +67,10 @@ module.exports = {
             email: email,
             gender: gender
         };
+
+        let databaseUser = await userCollection.findOne({ username: username });
+        if (databaseUser && databaseUser._id.toString() !== id) throw "That user already exisits!";
+
         const updatedInfo = await userCollection.updateOne(
             { _id: ObjectId(id) },
             { $set: updateUser }

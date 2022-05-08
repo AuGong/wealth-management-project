@@ -39,6 +39,7 @@ router.post('/signup', async (req, res) => {
         username = validation.checkUsername(username, "Username");
         password = validation.checkPassword(password, "Password");
         email = validation.checkEmail(email, "Email");
+        gender = validation.checkNormalString(gender, "Gender");
     } catch(e) {
         errors.push(e);
         return res.status(400).render('signup', {
@@ -106,6 +107,7 @@ router.post("/editprofile", async (req, res) => {
     try {
         updatedData.username = validation.checkUsername(updatedData.username, "Username");
         updatedData.email = validation.checkEmail(updatedData.email, "Email");
+        updatedData.gender = validation.checkNormalString(updatedData.gender, "Gender");
     } catch (e) {
         errors.push(e);
         return res.status(400).render('editProfile', {

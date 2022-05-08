@@ -58,6 +58,10 @@
             <input type="hidden" id="genderVal" value="{{currUser.gender}}"/>
         </div>
 
+        {{#each errors}}
+        <div>{{this}}</div>
+        {{/each}}
+
         <!-- Submit button -->
         <button type="submit" class="btn btn-block mb-2 signUpBtn">
         Submit
@@ -66,9 +70,5 @@
     </div>
 </div>
 </div>
-
-{{#each errors}}
-<div>{{this}}</div>
-{{/each}}
 
 <script src="../public/js/getGender.js"></script>
