@@ -230,9 +230,9 @@ module.exports = {
         let niceUserId = checkId(userId)
         const cryptoCollection = await cryptocurrency()
         let crypto = await cryptoCollection.find({coinHolders:{ $elemMatch: {userId:niceUserId}}}).toArray()
-        if(crypto.length===0){
-            throw "not find any relative crypto"
-        }
+        // if(crypto.length===0){
+        //     throw "not find any relative crypto"
+        // }
         for(let i = 0; i < crypto.length;i++){
             for(let j=0;j<crypto[i].coinHolders.length;j++){
                 if(crypto[i].coinHolders[j].userId===niceUserId && crypto[i].coinHolders[j].numberOfCoins !==0){
