@@ -67,18 +67,8 @@
 </div>
 </div>
 
-<script>
-    (function ($) {
-        $(document).ready(function() {
-            var nameselect=$("#genderVal").val();
-            var all_select=$("#inputGender > option");
+{{#each errors}}
+<div>{{this}}</div>
+{{/each}}
 
-            for(let i = 0;i < all_select.length; i++){
-                var svalue = all_select[i].text;
-                if(nameselect == svalue){
-                    $("#inputGender option[value='"+svalue+"']").attr("selected","selected");
-                }
-            }
-        });
-    })(jQuery);
-</script>
+<script src="../public/js/getGender.js"></script>
