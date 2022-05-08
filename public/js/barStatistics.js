@@ -21,7 +21,7 @@
         legend: { display: false },
         title: {
           display: true,
-          text: "Stock Net Profits",
+          text: "Stock Net Profits by stock code",
         },
       },
     });
@@ -41,7 +41,7 @@
         legend: { display: false },
         title: {
           display: true,
-          text: "Crypto Net Profits",
+          text: "Crypto Net Profits by crypto code",
         },
       },
     });
@@ -61,7 +61,7 @@
         legend: { display: false },
         title: {
           display: true,
-          text: "Stock Weights",
+          text: "Stock Weights by asset quantity",
         },
       },
     });
@@ -81,7 +81,7 @@
         legend: { display: false },
         title: {
           display: true,
-          text: "Crypto Weights",
+          text: "Crypto Weights by asset quantity",
         },
       },
     });
