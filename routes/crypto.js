@@ -42,7 +42,7 @@ router.get('/getPrice/:symbol',async(req,res)=>{
             let data = await cryptoData.getPrice(req.params.symbol)
             res.json([{"price":data.price,"name":data.cryptoName}])
         }catch(e){
-            res.status(500).json([])
+            res.json([])
         }
     }
 );
