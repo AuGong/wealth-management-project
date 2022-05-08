@@ -42,7 +42,7 @@
 
             <div class="form-outline mb-2 cover-group">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="Code" id="inputStockCode" name="inputStockCode" aria-describedby="button-addon">
+                <input type="text" class="form-control" placeholder="Code" id="inputStockCode" name="inputStockCode" aria-describedby="button-addon" required>
                 <button class="btn btn-info" type="button" id="button-addon">Search</button>
               </div>
               <label class="form-label" for="inputStockCode">Stock/Crypto Code</label> 
@@ -50,13 +50,13 @@
             
 
             <div class="form-outline mb-2 cover-group">
-              <input type="text" id="inputStockName" name="inputStockName" class="form-control" readonly/>
+              <input type="text" id="inputStockName" name="inputStockName" class="form-control" readonly required/>
               <label class="form-label" for="inputStockName">Stock/Crypto Name</label>  
             </div>
 
             <!-- Stock Price input -->
             <div class="form-outline mb-2 cover-group">
-              <input type="text" id="inputStockPrice" name="inputStockPrice" class="form-control" readonly/>
+              <input type="number" id="inputStockPrice" name="inputStockPrice" class="form-control" readonly required/>
               <label class="form-label" for="inputStockPrice">Stock/Crypto Current Price</label>  
             </div>
 
@@ -69,7 +69,7 @@
             </div>
 
             <div class="form-outline mb-2 cover-group">
-              <input type="text" id="inputQuantity" name="inputQuantity" class="form-control"/>
+              <input type="number" id="inputQuantity" name="inputQuantity" class="form-control" required/>
               <label class="form-label" for="inputQuantity">Quantity</label>  
             </div>
 

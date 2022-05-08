@@ -1,21 +1,13 @@
 const mongoCollections = require('../config/mongoCollections');
 const transactions = mongoCollections.transactions;
-let { ObjectId } = require('mongodb');
-
-// let newTransaction ={
-//   userId: userId,
-//   assetId: stockId,
-//   date: time,
-//   transactionType: false,
-//   assetType: true,
-//   quantity: amount,
-//   price: price
-// }
 
 module.exports = {
   async getUserTransactions(userId) {
     const transactionCollection = await transactions();
-    let data = await transactionCollection.find({ userId: userId }).toArray();
+    let data = await transactionCollection
+      .find({ userId: userId })
+      .sort({ date: -1 })
+      .toArray();
     return data;
   },
 

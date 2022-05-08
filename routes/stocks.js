@@ -73,9 +73,7 @@ router.post('/search', async (req, res) => {
 
         return res.status(200).redirect(`/stocks/${sym}`);
     }
-    else{
-        return res.status(403).redirect('/login');
-    }
+
 });
 router.get('/:symbol', async (req, res) =>{
     if(req.session.user){
@@ -88,6 +86,7 @@ router.get('/:symbol', async (req, res) =>{
                 title: "Error",
                 authenticated: true,
                 errors: errors,
+                currUser: req.session.user
               });
     }
     sym = sym.trim().toUpperCase();
@@ -101,6 +100,7 @@ router.get('/:symbol', async (req, res) =>{
             title: "Error",
             authenticated: true,
             errors: errors,
+            currUser: req.session.user
           });
     }
     let result = [];
@@ -120,12 +120,10 @@ router.get('/:symbol', async (req, res) =>{
             break;
         }
     }
-}
+    }
     return res.render("stocks", {stocks: result, currUser: req.session.user});
-}
-else{
-    return res.status(403).redirect('/login');
-}
+    }
+
 });
 router.get('/', async (req, res) =>{
     if (req.session.user){
@@ -140,6 +138,7 @@ router.get('/', async (req, res) =>{
                 title: "Error",
                 authenticated: true,
                 errors: errors,
+                currUser: req.session.user
               });
         }
         let result = [];
@@ -163,9 +162,6 @@ router.get('/', async (req, res) =>{
         }
         return res.status(200).render("stocks",{stocks: result, currUser: req.session.user});
     }
-    else{
-        return res.status(403).redirect('/login');
-    }
 })
 
 router.post('/tradestock', async (req, res) =>{
@@ -184,6 +180,7 @@ router.post('/tradestock', async (req, res) =>{
           title: "Error",
           authenticated: true,
           errors: errors,
+          currUser: req.session.user,
         });
     }
     symbol = symbol.trim().toUpperCase();
@@ -194,6 +191,7 @@ router.post('/tradestock', async (req, res) =>{
           title: "Error",
           authenticated: true,
           errors: errors,
+          currUser: req.session.user,
         }); 
     }
     amount = parseInt(amount);
@@ -206,6 +204,7 @@ router.post('/tradestock', async (req, res) =>{
           title: "Error",
           authenticated: true,
           errors: errors,
+          currUser: req.session.user,
         });
     }
     let findStockCheck;
@@ -218,6 +217,7 @@ router.post('/tradestock', async (req, res) =>{
           title: "Error",
           authenticated: true,
           errors: errors,
+          currUser: req.session.user,
         });
     }
     if (findStockCheck == null){
@@ -228,6 +228,7 @@ router.post('/tradestock', async (req, res) =>{
                 title: "Error",
                 authenticated: true,
                 errors: errors,
+                currUser: req.session.user
                 });
         }
         else{
@@ -237,9 +238,10 @@ router.post('/tradestock', async (req, res) =>{
         catch(e){
             errors.push(e);
             return res.status(400).render("trade", {
-            title: "Error",
-            authenticated: true,
-            errors: errors,
+              title: "Error",
+              authenticated: true,
+              errors: errors,
+              currUser: req.session.user,
             });
         }
     }
@@ -258,6 +260,7 @@ router.post('/tradestock', async (req, res) =>{
                 title: "Error",
                 authenticated: true,
                 errors: errors,
+                currUser: req.session.user
             });
         }
     }
@@ -271,14 +274,12 @@ router.post('/tradestock', async (req, res) =>{
                 title: "Error",
                 authenticated: true,
                 errors: errors,
+                currUser: req.session.user
             });
         }
     }
     return res.status(200).render("trade", {currUser: req.session.user });
     //return res.status(200).render("trade");
-}
-else{
-    return res.status(403).redirect('/login');
 }
 });
 

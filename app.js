@@ -48,6 +48,102 @@ app.use("/trade", (req, res, next) => {
   }
 });
 
+app.use("/user", (req, res, next) => {
+  if (!req.session.user) {
+    return res.status(403).render("notLogin", { title: "Not Login" });
+  } else {
+    next();
+  }
+});
+
+app.use("/editprofile", (req, res, next) => {
+  if (!req.session.user) {
+    return res.status(403).render("notLogin", { title: "Not Login" });
+  } else {
+    next();
+  }
+});
+
+app.use("/stocks", (req, res, next) => {
+  if (!req.session.user) {
+    return res.status(403).render("notLogin", { title: "Not Login" });
+  } else {
+    next();
+  }
+});
+
+app.use("/stocks/search", (req, res, next) => {
+  if (!req.session.user) {
+    return res.status(403).render("notLogin", { title: "Not Login" });
+  } else {
+    next();
+  }
+});
+
+app.use("/stocks/:symbol", (req, res, next) => {
+  if (!req.session.user) {
+    return res.status(403).render("notLogin", { title: "Not Login" });
+  } else {
+    next();
+  }
+});
+
+app.use("/stocks/tradestock", (req, res, next) => {
+  if (!req.session.user) {
+    return res.status(403).render("notLogin", { title: "Not Login" });
+  } else {
+    next();
+  }
+});
+
+app.use("/crypto", (req, res, next) => {
+  if (!req.session.user) {
+    return res.status(403).render("notLogin", { title: "Not Login" });
+  } else {
+    next();
+  }
+});
+
+app.use("/getPrice/:symbol", (req, res, next) => {
+  if (!req.session.user) {
+    return res.status(403).render("notLogin", { title: "Not Login" });
+  } else {
+    next();
+  }
+});
+
+app.use("/tradecrypto", (req, res, next) => {
+  if (!req.session.user) {
+    return res.status(403).render("notLogin", { title: "Not Login" });
+  } else {
+    next();
+  }
+});
+
+app.use("/transactions", (req, res, next) => {
+  if (!req.session.user) {
+    return res.status(403).render("notLogin", { title: "Not Login" });
+  } else {
+    next();
+  }
+});
+
+app.use("/statistics", (req, res, next) => {
+  if (!req.session.user) {
+    return res.status(403).render("notLogin", { title: "Not Login" });
+  } else {
+    next();
+  }
+});
+
+app.use("/statistics/bardata", (req, res, next) => {
+  if (!req.session.user) {
+    return res.status(403).render("notLogin", { title: "Not Login" });
+  } else {
+    next();
+  }
+});
+
 configRoutes(app);
 
 app.listen(3000, () => {

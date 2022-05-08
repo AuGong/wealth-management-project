@@ -18,13 +18,13 @@
                 <form id="signup-form" method="POST" action="/signup">
                     <!-- Username input -->
                     <div class="form-outline mb-2">
-                        <input type="text" id="inputUsername" class="form-control" name="username"/>
+                        <input type="text" id="inputUsername" class="form-control" name="username" required/>
                         <label class="form-label" for="inputUsername">Username</label>
                     </div>
 
                     <!-- Email input -->
                     <div class="form-outline mb-2">
-                        <input type="email" id="inputEmail" class="form-control" name="email"/>
+                        <input type="email" id="inputEmail" class="form-control" name="email" required/>
                         <label class="form-label" for="inputEmail">Email address</label>
                     </div>
 
@@ -40,7 +40,7 @@
 
                     <!-- Password input -->
                     <div class="form-outline mb-2 cover-group">
-                        <input type="password" id="password" name="password" class="form-control">
+                        <input type="password" id="password" name="password" class="form-control" required/>
                         <i class="bi bi-eye-slash" id="togglePassword"></i>
                         <label class="form-label" for="password">Password</label>  
                     </div>

@@ -1,7 +1,7 @@
 (function ($) {
 
-    let originalCode;
-    let toVerifyCode;
+    var originalCode = "";
+    var toVerifyCode = "";
     
 
     $("#button-addon").click(function (event) {
@@ -45,6 +45,8 @@
             if (originalCode !== toVerifyCode) {
                 alert("Use search first after code changed!");
             } else {
+                originalCode = "";
+                toVerifyCode = "";
                 $("#tradeForm").submit();
             }
         });
