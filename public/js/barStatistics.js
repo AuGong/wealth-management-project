@@ -45,5 +45,45 @@
         },
       },
     });
+
+    new Chart("pieChartStock", {
+      type: "pie",
+      data: {
+        labels: finalData[0].stockxValues,
+        datasets: [
+          {
+            backgroundColor: finalData[0].stockbarColors,
+            data: finalData[0].stockyPieValues,
+          },
+        ],
+      },
+      options: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: "Stock Weights",
+        },
+      },
+    });
+
+    new Chart("pieChartCrypto", {
+      type: "pie",
+      data: {
+        labels: finalData[0].cryptoxValues,
+        datasets: [
+          {
+            backgroundColor: finalData[0].cryptobarColors,
+            data: finalData[0].cryptoyPieValues,
+          },
+        ],
+      },
+      options: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: "Crypto Weights",
+        },
+      },
+    });
   });
 })(window.jQuery);

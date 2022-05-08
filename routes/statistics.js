@@ -26,33 +26,39 @@ router.get("/bardata", async (req, res) => {
     barData = await statisticsData.queryAllForStatistics(userId);
     stockxValues = [];
     stockyValues = [];
+    stockyPieValues = [];
     stockbarColors = [];
     stockBarData = barData.stockArray;
 
     for (let i = 0; i < stockBarData.length; i++) {
       stockxValues.push(stockBarData[i].symbol);
       stockyValues.push(stockBarData[i].avenue);
+      stockyPieValues.push(stockBarData[i].stockQuantity);
       stockbarColors.push(getRandomColor());
     }
 
     cryptoxValues = [];
     cryptoyValues = [];
+    cryptoyPieValues = [];
     cryptobarColors = [];
     cryptoBarData = barData.cryptoArray;
 
     for (let i = 0; i < cryptoBarData.length; i++) {
       cryptoxValues.push(cryptoBarData[i].symbol);
       cryptoyValues.push(cryptoBarData[i].avenue);
+      cryptoyPieValues.push(cryptoBarData[i].cryptoQuantity);
       cryptobarColors.push(getRandomColor());
     }
 
     res.json({
       stockxValues: stockxValues,
       stockyValues: stockyValues,
+      stockyPieValues: stockyPieValues,
       stockbarColors: stockbarColors,
       cryptoxValues: cryptoxValues,
       cryptoyValues: cryptoyValues,
       cryptobarColors: cryptobarColors,
+      cryptoyPieValues: cryptoyPieValues,
     });
   }
 });
