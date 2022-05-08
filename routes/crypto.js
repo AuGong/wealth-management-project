@@ -27,8 +27,8 @@ router.post('/',async(req,res)=>{
         let data = req.body
         let symbol = xss(data.inputStockCode)
         try{
-            let data = await cryptoData.searchCrypto(symbol,req.session.user._id)
-            res.render("crypto",{"cryptoCode":data.symbol, "cryptoName":data.cryptoName,"coinHolders":data.coinHolders,"currentPrice":data.currentPrice,"marketValue":data.marketValue,currUser: req.session.user})
+            let result = await cryptoData.searchCrypto(symbol,req.session.user._id)
+            res.render("crypto",{cryptos:[result],currUser: req.session.user})
         }catch(e){
             res.render("crypto",{errors:errors,currUser: req.session.user})
         }

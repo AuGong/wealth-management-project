@@ -217,7 +217,7 @@ module.exports = {
             return {}
         }else{
             marketValue = price * numberOfShares
-            return {"cryptoCode":niceSymbol, "cryptoName":cryptoNames[niceSymbol],"lowerName":cryptoNames[niceSymbol].toLowerCase(),"coinHolders":numberOfShares,"currentPrice":price,"marketValue":marketValue}
+            return {"symbol":niceSymbol, "cryptoName":cryptoNames[niceSymbol],"lowerName":cryptoNames[niceSymbol].toLowerCase(),"coinHolders":numberOfShares,"currentPrice":price,"marketValue":marketValue}
         }
         
 
