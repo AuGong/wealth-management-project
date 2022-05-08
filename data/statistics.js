@@ -29,13 +29,15 @@ module.exports = {
       let shift = 0;
       let stockQuantity = 0;
       for (let i = 0; i < data.length; i++) {
-        if (data[i].transactionType == "Sell") {
-          shift -= data[i].price * data[i].quantity;
-          stockQuantity -= data[i].quantity;
-        } else {
-          shift += data[i].price * data[i].quantity;
-          stockQuantity += data[i].quantity;
-        }
+        if (data[i].assetType === "Stock") {
+          if (data[i].transactionType === "Sell") {
+            shift -= data[i].price * data[i].quantity;
+            stockQuantity -= data[i].quantity;
+          } else {
+            shift += data[i].price * data[i].quantity;
+            stockQuantity += data[i].quantity;
+          }
+        }   
       }
       let avenueByStock = {
         symbol: stockSymbols[i],
@@ -53,12 +55,14 @@ module.exports = {
       let shift = 0;
       let cryptoQuantity = 0;
       for (let i = 0; i < data.length; i++) {
-        if (data[i].transactionType == "Sell") {
-          shift -= data[i].price * data[i].quantity;
-          cryptoQuantity -= data[i].quantity;
-        } else {
-          shift += data[i].price * data[i].quantity;
-          cryptoQuantity += data[i].quantity;
+        if (data[i].assetType === "Crypto") {
+          if (data[i].transactionType == "Sell") {
+            shift -= data[i].price * data[i].quantity;
+            cryptoQuantity -= data[i].quantity;
+          } else {
+            shift += data[i].price * data[i].quantity;
+            cryptoQuantity += data[i].quantity;
+          }
         }
       }
       let avenueByCrypto = {
