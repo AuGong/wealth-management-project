@@ -17,13 +17,12 @@ router.get('/',async(req,res)=>{
             res.status(500).render("crypto",{errors: errors, currUser: req.session.user})
         }
     }
-    else{
-        return res.status(403).redirect('/login');
-    }
+    
     
 });
 
 router.post('/',async(req,res)=>{
+    errors=[]
     if(req.session.user){
         let data = req.body
         let symbol = xss(data.inputStockCode)
@@ -31,7 +30,7 @@ router.post('/',async(req,res)=>{
             let data = await cryptoData.searchCrypto(symbol,req.session.user._id)
             res.render("crypto",{"cryptoCode":data.symbol, "cryptoName":data.cryptoName,"coinHolders":data.coinHolders,"currentPrice":data.currentPrice,"marketValue":data.marketValue})
         }catch(e){
-            res.status(500).json({})
+            res.render("crypto",{errors:errors,currUser: req.session.user})
         }
     }
 
