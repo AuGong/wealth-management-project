@@ -6,7 +6,7 @@
     box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
     box-sizing: border-box;
     margin: 10% 0 0 20%;
-    padding: 10px 0 14px;
+    padding: 10px 0 0 0;
     /* width: 396px; */
 }
 
@@ -15,7 +15,7 @@ body {
 }
 
 .container {
-    height: 83vh;
+    height: 84vh;
 }
 
 .cover-group {
@@ -68,7 +68,7 @@ body {
 }
 
 .tradeCard {
-    margin-top: -60px;
+    margin-top: -50px;
 }
 
 .stockSearch {

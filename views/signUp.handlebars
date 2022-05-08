@@ -45,13 +45,18 @@
                         <label class="form-label" for="password">Password</label>  
                     </div>
 
+                    {{#each errors}}
+                    <div>{{this}}</div>
+                    {{/each}}
+
                     <!-- Submit button -->
-                    <button type="submit" class="btn btn-block mb-2 signUpBtn">
+                    <button type="submit" class="btn btn-block signUpBtn">
                     Sign up
                     </button>
 
+                    <p>Already have an account? Click<a href="/login"> here </a> to login. </p>
+
                 </form>
-                <p>Already have an account? Click<a href="/login"> here </a> to login. </p>
                 </div>
             </div>
             </div>
@@ -59,20 +64,5 @@
         </div>
     </div>
   
-    <script>
-        let togglePassword = document.getElementById('togglePassword');
-        let password = document.querySelector('#password');
-  
-        togglePassword.addEventListener('click', () => {
-            // Toggle the type attribute using getAttribure() method
-            const type = password
-                .getAttribute('type') === 'password' ?
-                'text' : 'password';
-                  
-            password.setAttribute('type', type);
-     
-            // Toggle the eye and bi-eye icon
-            togglePassword.classList.toggle('bi-eye');
-        });
-    </script>
+    <script src="../public/js/togglePassword.js"></script>
 </main>
