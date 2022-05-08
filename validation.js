@@ -28,4 +28,13 @@ module.exports = {
     email = email.toLowerCase();
     return email;
   },
+
+  checkNormalString(strVal, varName) {
+    if (!strVal) throw `You must supply a ${varName}!`;
+    if (typeof strVal !== "string") throw `${varName} must be a string!`;
+    strVal = strVal.trim();
+    if (strVal.length === 0)
+      throw `${varName} cannot be an empty string or string with just spaces`;
+    return strVal;
+  },
 };

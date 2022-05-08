@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const data = require("../data");
 const transactionData = data.transactions;
+const validation = require("../validation");
 
 router.get('/', async(req,res) =>{
     if (req.session.user) {
@@ -32,6 +33,20 @@ router.post('/', async(req,res) =>{
         let userId = req.session.user._id;
         let symbol = req.body.inputStockCode;
         errors = [];
+
+        try {
+          symbol = validation.checkNormalString(symbol, "Stock Code");
+          symbol = symbol.toUpperCase();
+        } catch (e) {
+          errors.push(e);
+          res
+            .status(400)
+            .render("transactions", {
+              currUser: req.session.user,
+              errors: errors,
+            });
+        }    
+        
         try {
             userTransactions =
               await transactionData.getUserTransactionsBySymbol(userId, symbol);
