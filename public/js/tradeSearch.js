@@ -23,8 +23,12 @@
         
             $.ajax(searchConfig).then(function (responseMessage) {
                 var stockInfo = $(responseMessage);
-                $("#inputStockPrice").val(stockInfo[0].price);
-                $("#inputStockName").val(stockInfo[0].name);
+                if (stockInfo.length === 0) {
+                    alert("No Stock/Crypto found.");
+                } else {
+                    $("#inputStockPrice").val(stockInfo[0].price);
+                    $("#inputStockName").val(stockInfo[0].name);
+                }
             });
         } else {
                 alert("No code input.")
