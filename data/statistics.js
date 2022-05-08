@@ -1,78 +1,66 @@
-let { ObjectId } = require('mongodb');
 const transactionsJs = require('./transaction.js');
 
-
-// let newTransaction ={
-//   userId: userId,
-//   assetId: stockId,
-//   date: time,
-//   transactionType: false,
-//   assetType: true,
-//   quantity: amount,
-//   price: price
-// }
-
-// module.exports = {
-
-
-  // async getStockName() {
-  //   let transactions = await transactionsJs.queryAll();
-  //       let names = new Array();
-  //       for (let i = 0; i<transactions.length; i++){
-  //         if (!names.includes(transactions[i].symbol)) {
-  //           names.push(transactions[i].symbol);
-  //         }
-  //       }
-  //       return names;
-  // },
-  module.exports = {
+module.exports = {
   async queryAllForStatistics(userId){
     let transactions = await transactionsJs.getUserTransactions(userId);
-    let symbols = new Array();
-    for (let i = 0; i<transactions.length; i++){
-      if (!symbols.includes(transactions[i].symbol)) {
-        symbols.push(transactions[i].symbol);
-      }
-    }
-    for (let i = 0; i < symbols.length; i ++){
-      var array = []
-      var shift = 0
-      var data = await transactionsJs.getUserTransactionsBySymbol(userId, symbols[i]);
-      for (let i = 0; i < data.length; i++){
-        if (data[i].transactionType == "Sell"){
-          shift -= data[i].price * data[i].quantity;
+    let stockSymbols = new Array();
+    let cryptoSymbols = new Array();
+    for (let i = 0; i < transactions.length; i++){
+      if (transactions[i].assetType == "Stock") {
+        if (!stockSymbols.includes(transactions[i].symbol)) {
+          stockSymbols.push(transactions[i].symbol);
         }
-        shift += data[i].price * data[i].quantity;
       }
-      var avenueByStock = {
-        symbol: symbols[i],
-        avenue : shift
+      if (transactions[i].assetType == "Crypto") {
+        if (!cryptoSymbols.includes(transactions[i].symbol)) {
+          cryptoSymbols.push(transactions[i].symbol);
+        }
       }
-      array.push(avenueByStock);
     }
-    return array;
+
+    let stockArray = new Array();
+    let cryptoArray = new Array();
+
+    for (let i = 0; i < stockSymbols.length; i++) {
+      let data = await transactionsJs.getUserTransactionsBySymbol(
+        userId,
+        stockSymbols[i]
+      );
+      let shift = 0;
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].transactionType == "Sell") {
+          shift -= data[i].price * data[i].quantity;
+        } else {
+          shift += data[i].price * data[i].quantity;
+        }
+      }
+      let avenueByStock = {
+        symbol: stockSymbols[i],
+        avenue: shift,
+      };
+      stockArray.push(avenueByStock);
+    }
+    
+    for (let i = 0; i < cryptoSymbols.length; i++) {
+      let data = await transactionsJs.getUserTransactionsBySymbol(
+        userId,
+        cryptoSymbols[i]
+      );
+      let shift = 0;
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].transactionType == "Sell") {
+          shift -= data[i].price * data[i].quantity;
+        } else {
+          shift += data[i].price * data[i].quantity;
+        }
+      }
+      let avenueByStock = {
+        symbol: cryptoSymbols[i],
+        avenue: shift,
+      };
+      cryptoArray.push(avenueByStock);
+    }
+    
+    return { stockArray: stockArray, cryptoArray: cryptoArray };
+  }
 }
-}
-
-//   async  queryAll(){
-//     const stocksCollection = await stocks();
-//     let data = await stocksCollection.find({});
-//     let newStatistics ={
-//   symbol: data.symbol,
-//   quantity: data.amount
-// }
-//     return newStatistics;
-// },
-
-// async  queryByCode(userId){
-//   const transactionsCollection = await transactions();
-//   let data = await transactionsCollection.find({: foundSymbol});
-//   let newStatistics ={
-// symbol: data.symbol,
-// quantity: data.price
-// }
-//   return newStatistics;
-// }
-
-
-// };

@@ -24,19 +24,36 @@ router.get("/bardata", async (req, res) => {
   if (req.session.user) {
     userId = req.session.user._id;
     barData = await statisticsData.queryAllForStatistics(userId);
-    xValues = [];
-    yValues = [];
-    barColors = [];
-    if (barchart.length !== 0) {
-      for (let i = 0; i < barData.length; i++) {
-        xValues.push(barData[i].symbol);
-        yValues.push(barData[i].avenue);
-        barColors.push(getRandomColor());
-      }
-      res.json({ xValues: xValues, yValues: yValues, barColors: barColors });
-    } else {
-      res.json({ xValues: xValues, yValues: yValues, barColors: barColors });
+    stockxValues = [];
+    stockyValues = [];
+    stockbarColors = [];
+    stockBarData = barData.stockArray;
+
+    for (let i = 0; i < stockBarData.length; i++) {
+      stockxValues.push(stockBarData[i].symbol);
+      stockyValues.push(stockBarData[i].avenue);
+      stockbarColors.push(getRandomColor());
     }
+
+    cryptoxValues = [];
+    cryptoyValues = [];
+    cryptobarColors = [];
+    cryptoBarData = barData.cryptoArray;
+
+    for (let i = 0; i < cryptoBarData.length; i++) {
+      cryptoxValues.push(cryptoBarData[i].symbol);
+      cryptoyValues.push(cryptoBarData[i].avenue);
+      cryptobarColors.push(getRandomColor());
+    }
+
+    res.json({
+      stockxValues: stockxValues,
+      stockyValues: stockyValues,
+      stockbarColors: stockbarColors,
+      cryptoxValues: cryptoxValues,
+      cryptoyValues: cryptoyValues,
+      cryptobarColors: cryptobarColors,
+    });
   }
 });
 
