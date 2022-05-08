@@ -157,6 +157,9 @@ router.get('/', async (req, res) =>{
             }, 500);
             temp.price = info.data[0].price;
             temp.name = info.data[0].name;
+            if (temp.name == null){
+                temp.name = temp.symbol;
+            }
             temp.marketValue = Math.round(temp.numberOfShares * temp.price * 100) / 100;
             result.push(temp);
         }
