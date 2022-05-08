@@ -43,7 +43,7 @@
             event.preventDefault();
             toVerifyCode = $("#inputStockCode").val().trim();
             if (originalCode.toUpperCase() !== toVerifyCode.toUpperCase()) {
-              alert("Use search first after code changed!");
+              alert("Please use the search function after changing the code.");
             } else {
               originalCode = "";
               toVerifyCode = "";

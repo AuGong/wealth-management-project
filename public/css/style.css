@@ -98,3 +98,7 @@ body {
     padding-top: 20px;
     padding-left: 200px;
 }
+
+.notLogin {
+    text-align: center;
+}
