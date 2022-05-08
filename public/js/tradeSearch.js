@@ -46,8 +46,11 @@
         $("#submitBtn").click(function (event) {
             event.preventDefault();
             toVerifyCode = $("#inputStockCode").val().trim();
+            quantity = $("#inputQuantity").val();
             if (originalCode.toUpperCase() !== toVerifyCode.toUpperCase()) {
               alert("Please use the search function after changing the code.");
+            } else if (!quantity) {
+              alert("Please input the quantity.");  
             } else {
               originalCode = "";
               toVerifyCode = "";
