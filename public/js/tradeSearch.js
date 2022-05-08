@@ -29,7 +29,11 @@
                     alert("No Stock/Crypto found.");
                 } else {
                     $("#inputStockPrice").val(stockInfo[0].price);
-                    $("#inputStockName").val(stockInfo[0].name);
+                    if (stockInfo[0].name) {
+                        $("#inputStockName").val(stockInfo[0].name);
+                    } else {
+                        $("#inputStockName").val(stockInfo[0].symbol);
+                    }
                     originalCode = searchCode;
                 }
             });
