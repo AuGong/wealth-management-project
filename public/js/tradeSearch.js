@@ -42,12 +42,12 @@
         $("#submitBtn").click(function (event) {
             event.preventDefault();
             toVerifyCode = $("#inputStockCode").val().trim();
-            if (originalCode !== toVerifyCode) {
-                alert("Use search first after code changed!");
+            if (originalCode.toUpperCase() !== toVerifyCode.toUpperCase()) {
+              alert("Use search first after code changed!");
             } else {
-                originalCode = "";
-                toVerifyCode = "";
-                $("#tradeForm").submit();
+              originalCode = "";
+              toVerifyCode = "";
+              $("#tradeForm").submit();
             }
         });
      });
