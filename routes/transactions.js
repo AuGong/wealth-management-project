@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const data = require("../data");
 const transactionData = data.transactions;
-const validation = require("../validation");
+const validation = require("../public/js/validation");
 
 router.get('/', async(req,res) =>{
     if (req.session.user) {

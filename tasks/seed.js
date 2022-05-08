@@ -1,5 +1,5 @@
-const data = require('./data/');
-const connection = require('./config/mongoConnection');
+const data = require('../data');
+const connection = require('../config/mongoConnection');
 const { ObjectId } = require('mongodb');
 const stocks = data.stocks;
 const users = data.users;

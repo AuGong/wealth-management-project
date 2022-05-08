@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const data = require("../data");
 const userData = data.users;
-const validation = require("../validation");
+const validation = require("../public/js/validation");
 
 router.get('/login', async (req, res) => {
     if (req.session.user) {
