@@ -7,7 +7,7 @@
     "start": "node app.js",
     "seed": "node tasks/seed.js"
   },
-  "author": "Jiawei Lu 20007605, Audrey Gong 10451184",
+  "author": "Jiawei Lu 20007605, Audrey Gong 10451184, Ning Zhang 10476926, Guangwei Na 10469682",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.21.1",
